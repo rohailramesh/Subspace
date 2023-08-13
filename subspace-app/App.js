@@ -4,13 +4,14 @@ import { useState, useEffect } from "react";
 
 import { supabase } from "./lib/supabase";
 
-import Auth from "./components/Auth";
+import Auth from "./screens/Auth";
 
-import Account from "./components/Account";
+import HomePage from "./screens/Home";
 
 import { View } from "react-native";
 
 import { Session } from "@supabase/supabase-js";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 export default function App() {
   const [session, setSession] = useState(null);
@@ -26,12 +27,14 @@ export default function App() {
   }, []);
 
   return (
-    <View>
-      {session && session.user ? (
-        <Account key={session.user.id} session={session} />
-      ) : (
-        <Auth />
-      )}
-    </View>
+    <SafeAreaProvider>
+      <View>
+        {session && session.user ? (
+          <HomePage key={session.user.id} session={session} />
+        ) : (
+          <Auth />
+        )}
+      </View>
+    </SafeAreaProvider>
   );
 }

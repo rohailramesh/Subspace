@@ -4,7 +4,7 @@ import { StyleSheet, View, Alert, Text } from "react-native";
 import { Button, Input } from "react-native-elements";
 import { Session } from "@supabase/supabase-js";
 
-export default function Account({ session }) {
+export default function HomePage({ session }) {
   const [loading, setLoading] = useState(true);
   const [username, setUsername] = useState("");
   const [website, setWebsite] = useState("");
@@ -42,10 +42,6 @@ export default function Account({ session }) {
     } finally {
       setLoading(false);
     }
-  }
-
-  async function updateProfile({ username, website, avatar_url }) {
-    // ...
   }
 
   return (
