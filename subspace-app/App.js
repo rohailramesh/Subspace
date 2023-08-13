@@ -4,14 +4,16 @@ import { useState, useEffect } from "react";
 
 import { supabase } from "./lib/supabase";
 
+import { NavigationContainer } from "@react-navigation/native";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+
+import HomePage from "./screens/HomePage";
+import ManageScreen from "./components/ManageScreen";
+import AddScreen from "./components/AddScreen";
+import ProfileScreen from "./components/ProfileScreen";
 import Auth from "./screens/Auth";
 
-import HomePage from "./screens/Home";
-
-import { View } from "react-native";
-
-import { Session } from "@supabase/supabase-js";
-import { SafeAreaProvider } from "react-native-safe-area-context";
+const Tab = createBottomTabNavigator();
 
 export default function App() {
   const [session, setSession] = useState(null);
@@ -27,14 +29,21 @@ export default function App() {
   }, []);
 
   return (
-    <SafeAreaProvider>
-      <View>
-        {session && session.user ? (
-          <HomePage key={session.user.id} session={session} />
-        ) : (
-          <Auth />
-        )}
-      </View>
-    </SafeAreaProvider>
+    <NavigationContainer>
+      {session ? (
+        <Tab.Navigator>
+          <Tab.Screen
+            name="Home"
+            children={() => <HomePage session={session} />}
+          />
+
+          <Tab.Screen name="Manage" component={ManageScreen} />
+          <Tab.Screen name="Add" component={AddScreen} />
+          <Tab.Screen name="Profile" component={ProfileScreen} />
+        </Tab.Navigator>
+      ) : (
+        <Auth />
+      )}
+    </NavigationContainer>
   );
 }
