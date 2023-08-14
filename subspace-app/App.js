@@ -1,5 +1,5 @@
 import "react-native-url-polyfill/auto";
-
+import { Image } from "react-native-elements";
 import { useState, useEffect } from "react";
 
 import { supabase } from "./lib/supabase";
@@ -33,13 +33,71 @@ export default function App() {
       {session ? (
         <Tab.Navigator>
           <Tab.Screen
-            name="Home"
+            name="Subscriptions"
             children={() => <HomePage session={session} />}
+            options={{
+              tabBarIcon: ({ focused }) => (
+                <Image
+                  source={require("./assets/icons/subscription-model.png")}
+                  style={{
+                    width: 25,
+                    height: 25,
+                    tintColor: focused ? "#007AFF" : "#8E8E93",
+                  }}
+                />
+              ),
+            }}
           />
 
-          <Tab.Screen name="Manage" component={ManageScreen} />
-          <Tab.Screen name="Add" component={AddScreen} />
-          <Tab.Screen name="Profile" component={ProfileScreen} />
+          {/* <Tab.Screen name="Manage" component={ManageScreen} /> */}
+          {/* <Tab.Screen
+            name="Manage"
+            component={ManageScreen}
+            options={{
+              tabBarIcon: ({ focused }) => (
+                <Image
+                  source={require("./assets/icons/user.png")}
+                  style={{
+                    width: 25,
+                    height: 25,
+                    tintColor: focused ? "#007AFF" : "#8E8E93",
+                  }}
+                />
+              ),
+            }}
+          /> */}
+          <Tab.Screen
+            name="Add"
+            component={AddScreen}
+            options={{
+              tabBarIcon: ({ focused }) => (
+                <Image
+                  source={require("./assets/icons/add.png")}
+                  style={{
+                    width: 25,
+                    height: 25,
+                    tintColor: focused ? "#007AFF" : "#8E8E93",
+                  }}
+                />
+              ),
+            }}
+          />
+          <Tab.Screen
+            name="Profile"
+            component={ProfileScreen}
+            options={{
+              tabBarIcon: ({ focused }) => (
+                <Image
+                  source={require("./assets/icons/user.png")}
+                  style={{
+                    width: 25,
+                    height: 25,
+                    tintColor: focused ? "#007AFF" : "#8E8E93",
+                  }}
+                />
+              ),
+            }}
+          />
         </Tab.Navigator>
       ) : (
         <Auth />
