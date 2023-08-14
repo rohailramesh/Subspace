@@ -50,25 +50,11 @@ export default function App() {
           />
 
           {/* <Tab.Screen name="Manage" component={ManageScreen} /> */}
-          {/* <Tab.Screen
-            name="Manage"
-            component={ManageScreen}
-            options={{
-              tabBarIcon: ({ focused }) => (
-                <Image
-                  source={require("./assets/icons/user.png")}
-                  style={{
-                    width: 25,
-                    height: 25,
-                    tintColor: focused ? "#007AFF" : "#8E8E93",
-                  }}
-                />
-              ),
-            }}
-          /> */}
+
           <Tab.Screen
             name="Add"
-            component={AddScreen}
+            // component={AddScreen}
+            children={() => <AddScreen session={session} />}
             options={{
               tabBarIcon: ({ focused }) => (
                 <Image
