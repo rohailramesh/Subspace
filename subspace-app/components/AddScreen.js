@@ -3,15 +3,33 @@ import { supabase } from "../lib/supabase";
 import { View, Text, TextInput, Button, StyleSheet } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
 
-const data = [
+const subscriptionTypes = [
   { label: "Paid", value: "Paid" },
   { label: "Trial", value: "Trial" },
+];
+
+const subscriptionStatuses = [
+  { label: "Active", value: "Active" },
+  { label: "Upcoming", value: "Upcoming" },
+  { label: "Expired", value: "Expired" },
+];
+
+const subscriptionCategories = [
+  { label: "Entertainment", value: "Entertainment" },
+  { label: "News/Info", value: "News/Info" },
+  { label: "Lifestyle", value: "Lifestyle" },
+  { label: "Productivity", value: "Productivity" },
+  { label: "Finance", value: "Finance" },
+  { label: "Education", value: "Education" },
+  { label: "Services", value: "Services" },
 ];
 
 export default function AddScreen({ session }) {
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [type, setType] = useState(null);
+  const [status, setStatus] = useState(null);
+  const [category, setCategory] = useState(null);
   const [isFocus, setIsFocus] = useState(false);
 
   const addSubscription = async () => {
@@ -20,12 +38,17 @@ export default function AddScreen({ session }) {
       name: name,
       price: price,
       type: type,
+      status: status,
+      category: category,
     });
     if (error) {
       console.log(error);
     } else {
       setName("");
       setPrice("");
+      setType(null);
+      setStatus(null);
+      setCategory(null);
     }
   };
 
@@ -47,7 +70,7 @@ export default function AddScreen({ session }) {
 
       <Dropdown
         style={[dropdownStyles.dropdown, isFocus && { borderColor: "blue" }]}
-        data={data}
+        data={subscriptionTypes}
         maxHeight={300}
         labelField="label"
         valueField="value"
@@ -57,6 +80,38 @@ export default function AddScreen({ session }) {
         onBlur={() => setIsFocus(false)}
         onChange={(item) => {
           setType(item.value);
+          setIsFocus(false);
+        }}
+      />
+
+      <Dropdown
+        style={[dropdownStyles.dropdown, isFocus && { borderColor: "blue" }]}
+        data={subscriptionStatuses}
+        maxHeight={300}
+        labelField="label"
+        valueField="value"
+        placeholder={"Subscription Status"}
+        value={status}
+        onFocus={() => setIsFocus(true)}
+        onBlur={() => setIsFocus(false)}
+        onChange={(item) => {
+          setStatus(item.value);
+          setIsFocus(false);
+        }}
+      />
+
+      <Dropdown
+        style={[dropdownStyles.dropdown, isFocus && { borderColor: "blue" }]}
+        data={subscriptionCategories}
+        maxHeight={300}
+        labelField="label"
+        valueField="value"
+        placeholder={"Subscription Category"}
+        value={category}
+        onFocus={() => setIsFocus(true)}
+        onBlur={() => setIsFocus(false)}
+        onChange={(item) => {
+          setCategory(item.value);
           setIsFocus(false);
         }}
       />
