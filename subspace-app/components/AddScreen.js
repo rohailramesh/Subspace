@@ -178,7 +178,7 @@ export default function AddScreen({ session }) {
         maxHeight={300}
         labelField="label"
         valueField="value"
-        placeholder={"Billing Period"}
+        placeholder={"Subscription Billing Period"}
         value={billingPeriod}
         onFocus={() => setIsFocus(true)}
         onBlur={() => setIsFocus(false)}

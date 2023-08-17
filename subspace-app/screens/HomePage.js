@@ -12,7 +12,7 @@ export default function HomePage({ session }) {
   const [subscriptions, setSubscriptions] = useState([]);
   const navigation = useNavigation();
   useEffect(() => {
-    console.log(session); // Add this line to check session data
+    console.log(session.user.id); // Add this line to check session data
     getProfile();
     displaySubscription();
   }, [session]);
@@ -46,22 +46,22 @@ export default function HomePage({ session }) {
       setLoading(false);
     }
   }
-
+  const userId = session.user.id;
   async function displaySubscription() {
     try {
       setLoading(true);
-      let { data, error } = await supabase
+      const { data: subscriptionData, error } = await supabase
         .from("subspace_app")
         .select("*")
-        .eq("user_id", session.user.id)
-        .order("start_date", { ascending: false }); // Optional: Order subscriptions by start date
+        .eq("user_id", userId);
 
       if (error) {
         throw error;
       }
-      if (data) {
-        setSubscriptions(data);
-        console.log(subscriptions);
+      if (subscriptionData) {
+        // Notice the change here
+        setSubscriptions(subscriptionData); // Use subscriptionData instead of data
+        console.log(subscriptionData);
       }
     } catch (error) {
       console.log(error);
