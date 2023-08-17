@@ -41,6 +41,8 @@ export default function AddScreen({ session }) {
   const [billingPeriod, setBillingPeriod] = useState(null);
   const [notes, setNotes] = useState("");
   const [startDate, setStartDate] = useState(new Date());
+  const [nextBillingDate, setNextBillingDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
   const [isFocus, setIsFocus] = useState(false);
 
   const addSubscription = async () => {
@@ -54,6 +56,8 @@ export default function AddScreen({ session }) {
       billing_period: billingPeriod,
       notes: notes,
       start_date: startDate,
+      end_date: endDate,
+      next_billing_date: nextBillingDate,
     });
     if (error) {
       console.log(error);
@@ -65,7 +69,9 @@ export default function AddScreen({ session }) {
       setStatus(null);
       setBillingPeriod(null);
       setCategory(null);
-      setStartDate(new Date());
+      setStartDate(null);
+      setEndDate(null);
+      setNextBillingDate(null);
     }
   };
 
@@ -92,10 +98,27 @@ export default function AddScreen({ session }) {
       />
 
       <DatePickerInput
-        // locale="en"
         label="Subscription Start Date"
         value={startDate}
         onChange={(d) => setStartDate(d)}
+        inputMode="start"
+        style={{ width: 200 }}
+        mode="outlined"
+      />
+
+      <DatePickerInput
+        label="Subscription End Date"
+        value={endDate}
+        onChange={(d) => setEndDate(d)}
+        inputMode="start"
+        style={{ width: 200 }}
+        mode="outlined"
+      />
+
+      <DatePickerInput
+        label="Subscription Next Billing Date"
+        value={nextBillingDate}
+        onChange={(d) => setNextBillingDate(d)}
         inputMode="start"
         style={{ width: 200 }}
         mode="outlined"
