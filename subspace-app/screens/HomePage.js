@@ -14,7 +14,7 @@ export default function HomePage({ session }) {
   useEffect(() => {
     console.log(session.user.id); // Add this line to check session data
     getProfile();
-    displaySubscription();
+    // displaySubscription();
   }, [session]);
 
   async function getProfile() {
@@ -28,7 +28,7 @@ export default function HomePage({ session }) {
       let { data, error, status } = await supabase
         .from("profiles")
         .select(`username, website, avatar_url`)
-        .eq("id", session.user.id)
+        .eq("user_id", session.user.id)
         .single();
 
       if (error && status !== 406) {
@@ -46,29 +46,6 @@ export default function HomePage({ session }) {
       setLoading(false);
     }
   }
-  const userId = session.user.id;
-  async function displaySubscription() {
-    try {
-      setLoading(true);
-      const { data: subscriptionData, error } = await supabase
-        .from("subspace_app")
-        .select("*")
-        .eq("user_id", userId);
-
-      if (error) {
-        throw error;
-      }
-      if (subscriptionData) {
-        // Notice the change here
-        setSubscriptions(subscriptionData); // Use subscriptionData instead of data
-        console.log(subscriptionData);
-      }
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  }
 
   return (
     <View style={styles.container}>
@@ -80,20 +57,6 @@ export default function HomePage({ session }) {
         title="Go to Manage"
         onPress={() => navigation.navigate("Manage")}
       />
-
-      {loading ? (
-        <Text>Loading Subscriptions...</Text>
-      ) : (
-        <View>
-          <Text>Subscriptions: </Text>
-          {subscriptions.map((subscription) => (
-            <View key={subscription.id}>
-              <Text>Subscription Name: {subscription.name}</Text>
-              <Text>Subscription Price: {subscription.price}</Text>
-            </View>
-          ))}
-        </View>
-      )}
     </View>
   );
 }
