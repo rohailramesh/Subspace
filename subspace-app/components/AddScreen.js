@@ -46,7 +46,7 @@ export default function AddScreen({ session }) {
   const [isFocus, setIsFocus] = useState(false);
 
   const addSubscription = async () => {
-    const { data, error } = await supabase.from("subspace_app").insert({
+    const { data, error } = await supabase.from("subspace").insert({
       user_id: session.user.id,
       name: name,
       price: price,

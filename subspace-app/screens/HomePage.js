@@ -7,14 +7,14 @@ import { useNavigation } from "@react-navigation/native";
 export default function HomePage({ session }) {
   const [loading, setLoading] = useState(true);
   const [username, setUsername] = useState("");
-  const [website, setWebsite] = useState("");
-  const [avatarUrl, setAvatarUrl] = useState("");
+  // const [website, setWebsite] = useState("");
+  // const [avatarUrl, setAvatarUrl] = useState("");
   const [subscriptions, setSubscriptions] = useState([]);
   const navigation = useNavigation();
   useEffect(() => {
     console.log(session.user.id); // Add this line to check session data
     getProfile();
-    // displaySubscription();
+    fetchUserSubscriptions();
   }, [session]);
 
   async function getProfile() {
@@ -26,19 +26,21 @@ export default function HomePage({ session }) {
       }
 
       let { data, error, status } = await supabase
-        .from("profiles")
-        .select(`username, website, avatar_url`)
-        .eq("user_id", session.user.id)
+        .from("profile")
+        .select(`id, email`)
+        .eq("id", session.user.id)
         .single();
 
+      console.log(data);
       if (error && status !== 406) {
         throw error;
       }
 
       if (data) {
-        setUsername(data.username);
-        setWebsite(data.website);
-        setAvatarUrl(data.avatar_url);
+        // setUsername(data.username);
+        console.log(data);
+        // setWebsite(data.website);
+        // setAvatarUrl(data.avatar_url);
       }
     } catch (error) {
       Alert.alert(error.message);
@@ -47,9 +49,50 @@ export default function HomePage({ session }) {
     }
   }
 
+  async function fetchUserSubscriptions() {
+    try {
+      setLoading(true);
+
+      const { data, error } = await supabase
+        .from("subspace")
+        .select(`*`)
+        .eq("user_id", session.user.id);
+      console.log(data);
+
+      if (error) {
+        throw error;
+      }
+
+      setSubscriptions(data);
+    } catch (error) {
+      console.error("Error fetching user subscriptions:", error.message);
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
     <View style={styles.container}>
       <Text>{session?.user?.email || "No user"}</Text>
+      <Text style={{ marginTop: 20 }}>User Subscriptions:</Text>
+      <View>
+        {subscriptions.map((subscription, index) => (
+          <View key={index} style={styles.subscriptionItem}>
+            <Text>Name: {subscription.name}</Text>
+            <Text>Price: {subscription.price}</Text>
+            <Text>Start Date: {subscription.start_date}</Text>
+            <Text>End Date: {subscription.end_date}</Text>
+            <Text>Next Billing Date: {subscription.next_billing_date}</Text>
+            <Text>Category: {subscription.category}</Text>
+            <Text>Type: {subscription.type}</Text>
+            <Text>Billing Period: {subscription.billing_period}</Text>
+            <Text>Notes: {subscription.notes}</Text>
+            <Text>Status: {subscription.status}</Text>
+            <Text></Text>
+            {/* Display other subscription details */}
+          </View>
+        ))}
+      </View>
 
       <Button title="Sign Out" onPress={() => supabase.auth.signOut()} />
 
