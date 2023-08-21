@@ -4,6 +4,7 @@ import { supabase } from "../lib/supabase";
 import { StyleSheet, View, Alert, Text } from "react-native";
 import { Button, Input } from "react-native-elements";
 import { useNavigation } from "@react-navigation/native";
+import UpcomingPayments from "../components/UpcomingPayments";
 export default function HomePage({ session }) {
   const [loading, setLoading] = useState(true);
   const [username, setUsername] = useState("");
