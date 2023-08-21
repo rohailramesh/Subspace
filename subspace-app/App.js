@@ -6,15 +6,31 @@ import { supabase } from "./lib/supabase";
 
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import HomePage from "./screens/HomePage";
-import ManageScreen from "./components/ManageScreen";
+import ManageScreen from "./components/UpcomingPayments";
 import AddScreen from "./components/AddScreen";
-import ProfileScreen from "./components/ProfileScreen";
+import UpcomingPayments from "./components/UpcomingPayments";
 import Auth from "./screens/Auth";
 
 const Tab = createBottomTabNavigator();
-
+const Stack = createNativeStackNavigator();
+function MainStack({ session }) {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="Home"
+        component={HomePage}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Manage"
+        component={ManageScreen}
+        options={{ title: "Manage" }}
+      />
+    </Stack.Navigator>
+  );
+}
 export default function App() {
   const [session, setSession] = useState(null);
 
@@ -33,7 +49,7 @@ export default function App() {
       {session ? (
         <Tab.Navigator>
           <Tab.Screen
-            name="Subscriptions"
+            name="My Subscriptions"
             children={() => <HomePage session={session} />}
             options={{
               tabBarIcon: ({ focused }) => (
@@ -46,13 +62,14 @@ export default function App() {
                   }}
                 />
               ),
+              tabBarLabel: "Subscriptions",
             }}
           />
 
           {/* <Tab.Screen name="Manage" component={ManageScreen} /> */}
 
           <Tab.Screen
-            name="Add"
+            name="Add Subscription"
             // component={AddScreen}
             children={() => <AddScreen session={session} />}
             options={{
@@ -66,15 +83,16 @@ export default function App() {
                   }}
                 />
               ),
+              tabBarLabel: "Add",
             }}
           />
           <Tab.Screen
-            name="Profile"
-            component={ProfileScreen}
+            name="Upcoming Payments"
+            children={() => <UpcomingPayments session={session} />}
             options={{
               tabBarIcon: ({ focused }) => (
                 <Image
-                  source={require("./assets/icons/user.png")}
+                  source={require("./assets/icons/payment.png")}
                   style={{
                     width: 25,
                     height: 25,
@@ -82,6 +100,7 @@ export default function App() {
                   }}
                 />
               ),
+              tabBarLabel: "Payments",
             }}
           />
         </Tab.Navigator>

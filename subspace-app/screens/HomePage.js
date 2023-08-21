@@ -10,9 +10,8 @@ export default function HomePage({ session }) {
   // const [website, setWebsite] = useState("");
   // const [avatarUrl, setAvatarUrl] = useState("");
   const [subscriptions, setSubscriptions] = useState([]);
-  const navigation = useNavigation();
   useEffect(() => {
-    console.log(session.user.id); // Add this line to check session data
+    // console.log(session.user.id);
     getProfile();
     fetchUserSubscriptions();
     const subscriptionChannel = supabase
@@ -46,14 +45,14 @@ export default function HomePage({ session }) {
         .eq("id", session.user.id)
         .single();
 
-      console.log(data);
+      // console.log(data);
       if (error && status !== 406) {
         throw error;
       }
 
       if (data) {
         // setUsername(data.username);
-        console.log(data);
+        // console.log(data);
         // setWebsite(data.website);
         // setAvatarUrl(data.avatar_url);
       }
@@ -110,11 +109,6 @@ export default function HomePage({ session }) {
       </View>
 
       <Button title="Sign Out" onPress={() => supabase.auth.signOut()} />
-
-      <Button
-        title="Go to Manage"
-        onPress={() => navigation.navigate("Manage")}
-      />
     </View>
   );
 }
