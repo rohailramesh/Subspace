@@ -1,9 +1,8 @@
 import "react-native-url-polyfill/auto";
 import { Image } from "react-native-elements";
 import { useState, useEffect } from "react";
-
+import { ScrollView } from "react-native";
 import { supabase } from "./lib/supabase";
-
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -47,6 +46,7 @@ export default function App() {
   return (
     <NavigationContainer>
       {session ? (
+        // <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <Tab.Navigator>
           <Tab.Screen
             name="My Subscriptions"
@@ -105,6 +105,7 @@ export default function App() {
           />
         </Tab.Navigator>
       ) : (
+        // </ScrollView>
         <Auth />
       )}
     </NavigationContainer>

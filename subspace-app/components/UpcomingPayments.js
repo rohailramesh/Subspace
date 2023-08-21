@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { supabase } from "../lib/supabase";
-import { View, Text } from "react-native";
+import { View, Text, ScrollView } from "react-native";
 
 export default function UpcomingPayments({ session }) {
   const [loading, setLoading] = useState(true);
@@ -53,16 +53,19 @@ export default function UpcomingPayments({ session }) {
   }
 
   return (
-    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-      {/* <Text>Upcoming Payments Screen</Text> */}
-      {/* Display upcomingSubscriptions */}
-      {upcomingSubscriptions.map((subscription, index) => (
-        <View key={index}>
-          <Text>Name: {subscription.name}</Text>
-          <Text>Price: {subscription.price}</Text>
-          {/* Display other subscription details */}
-        </View>
-      ))}
+    <View style={{ flex: 1, alignItems: "left", justifyContent: "left" }}>
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+        {/* <Text>Upcoming Payments Screen</Text> */}
+        {/* Display upcomingSubscriptions */}
+        {upcomingSubscriptions.map((subscription, index) => (
+          <View key={index}>
+            <Text>Name: {subscription.name}</Text>
+            <Text>Price: {subscription.price}</Text>
+            <Text>Next Billing Date: {subscription.next_billing_date}</Text>
+            {/* Display other subscription details */}
+          </View>
+        ))}
+      </ScrollView>
     </View>
   );
 }
