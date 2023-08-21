@@ -15,6 +15,21 @@ export default function HomePage({ session }) {
     console.log(session.user.id); // Add this line to check session data
     getProfile();
     fetchUserSubscriptions();
+    const subscriptionChannel = supabase
+      .channel("custom-all-channel")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "subspace" },
+        (payload) => {
+          console.log("Change received!", payload);
+          fetchUserSubscriptions();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      subscriptionChannel.unsubscribe();
+    };
   }, [session]);
 
   async function getProfile() {
