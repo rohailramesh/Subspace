@@ -70,7 +70,7 @@ export default function HomePage({ session }) {
         .from("subspace")
         .select(`*`)
         .eq("user_id", session.user.id);
-      console.log(data);
+      // console.log(data);
 
       if (error) {
         throw error;
@@ -84,6 +84,25 @@ export default function HomePage({ session }) {
     }
   }
 
+  async function deleteSubscription(id) {
+    try {
+      setLoading(true);
+
+      const { error } = await supabase.from("subspace").delete().eq("id", id);
+      console.log("deleted");
+      if (error) {
+        throw error;
+      }
+
+      // Fetch updated subscriptions
+      fetchUserSubscriptions();
+    } catch (error) {
+      console.error("Error deleting subscription:", error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
@@ -92,7 +111,10 @@ export default function HomePage({ session }) {
         <View>
           {subscriptions.map((subscription, index) => (
             <View key={index} style={styles.subscriptionItem}>
-              <SubscriptionCard subscription={subscription} />
+              <SubscriptionCard
+                subscription={subscription}
+                onDelete={() => deleteSubscription(subscription.id)}
+              />
               {/* Display other subscription details */}
             </View>
           ))}

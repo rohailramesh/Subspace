@@ -1,7 +1,7 @@
 import React from "react";
 import { Card, Text, Button } from "react-native-paper";
 
-const SubscriptionCard = ({ subscription }) => {
+const SubscriptionCard = ({ subscription, onDelete }) => {
   return (
     <Card style={styles.outlinedCard}>
       <Card.Content>
@@ -10,8 +10,7 @@ const SubscriptionCard = ({ subscription }) => {
         {/* Add other subscription details */}
       </Card.Content>
       <Card.Actions>
-        <Button>Cancel</Button>
-        <Button>Ok</Button>
+        <Button onPress={onDelete}>Delete</Button>
       </Card.Actions>
     </Card>
   );
