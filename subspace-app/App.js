@@ -19,6 +19,15 @@ export default function App() {
   const [session, setSession] = useState(null);
 
   useEffect(() => {
+    const checkSession = async () => {
+      const { data: session, error } = await supabase.auth.getSession();
+      if (session) {
+        supabase.auth.signOut(); // Log out if a session is found
+      }
+    };
+
+    checkSession();
+
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
     });
@@ -48,8 +57,16 @@ export default function App() {
                 />
               ),
               tabBarLabel: "Subscriptions",
+              headerShown: false,
             }}
           />
+          {/* <Tab.Screen
+            name="My Subscriptions"
+            children={() => <HomePage session={session} />}
+            options={{
+              headerShown: false, // Hide default header
+            }}
+          /> */}
 
           {/* <Tab.Screen name="Manage" component={ManageScreen} /> */}
 
@@ -69,6 +86,7 @@ export default function App() {
                 />
               ),
               tabBarLabel: "Add",
+              headerShown: false,
             }}
           />
           <Tab.Screen
@@ -86,6 +104,7 @@ export default function App() {
                 />
               ),
               tabBarLabel: "Payments",
+              headerShown: false,
             }}
           />
         </Tab.Navigator>

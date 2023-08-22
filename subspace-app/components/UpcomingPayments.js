@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 import { supabase } from "../lib/supabase";
-import { View, Text, ScrollView } from "react-native";
-
+import { View, Text, ScrollView, StyleSheet } from "react-native";
+import { Button } from "react-native-elements";
+import { useNavigation } from "@react-navigation/native";
 export default function UpcomingPayments({ session }) {
   const [loading, setLoading] = useState(true);
   const [upcomingSubscriptions, setUpcomingSubscriptions] = useState([]);
-
+  const navigation = useNavigation();
   useEffect(() => {
     fetchUpcomingSubscriptions();
     const subscriptionChannel = supabase
@@ -54,6 +55,10 @@ export default function UpcomingPayments({ session }) {
 
   return (
     <View style={{ flex: 1, alignItems: "left", justifyContent: "left" }}>
+      <View style={styles.headerContainer}>
+        <Text style={styles.headerText}>User Subscriptions</Text>
+        <Button title="Sign Out" onPress={() => supabase.auth.signOut()} />
+      </View>
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         {/* <Text>Upcoming Payments Screen</Text> */}
         {/* Display upcomingSubscriptions */}
@@ -69,3 +74,29 @@ export default function UpcomingPayments({ session }) {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    marginTop: 40,
+    padding: 12,
+  },
+  verticallySpaced: {
+    paddingTop: 4,
+    paddingBottom: 4,
+    alignSelf: "stretch",
+  },
+  mt20: {
+    marginTop: 20,
+  },
+  headerContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: 20,
+    marginTop: 50,
+  },
+  headerText: {
+    fontSize: 30,
+    fontWeight: "bold",
+  },
+});

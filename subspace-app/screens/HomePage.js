@@ -3,12 +3,15 @@ import { supabase } from "../lib/supabase";
 import SubscriptionCard from "../components/SubscriptionCard";
 import { StyleSheet, View, Alert, Text, ScrollView } from "react-native";
 import { Button, Input } from "react-native-elements";
+import { useNavigation } from "@react-navigation/native";
+import { IconButton } from "react-native-paper";
 export default function HomePage({ session }) {
   const [loading, setLoading] = useState(true);
   const [username, setUsername] = useState("");
   // const [website, setWebsite] = useState("");
   // const [avatarUrl, setAvatarUrl] = useState("");
   const [subscriptions, setSubscriptions] = useState([]);
+  const navigation = useNavigation();
   useEffect(() => {
     // console.log(session.user.id);
     getProfile();
@@ -107,7 +110,13 @@ export default function HomePage({ session }) {
     <View style={styles.container}>
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         {/* <Text>{session?.user?.email || "No user"}</Text> */}
-        <Text style={{}}>User Subscriptions:</Text>
+        <View style={styles.headerContainer}>
+          <Text style={styles.headerText}>User Subscriptions</Text>
+          <IconButton
+            icon="logout" // Replace with the name of your PNG image (without the file extension)
+            onPress={() => supabase.auth.signOut()}
+          />
+        </View>
         <View>
           {subscriptions.map((subscription, index) => (
             <View key={index} style={styles.subscriptionItem}>
@@ -120,7 +129,7 @@ export default function HomePage({ session }) {
           ))}
         </View>
 
-        <Button title="Sign Out" onPress={() => supabase.auth.signOut()} />
+        {/* <Button title="Sign Out" onPress={() => supabase.auth.signOut()} /> */}
       </ScrollView>
     </View>
   );
@@ -138,5 +147,16 @@ const styles = StyleSheet.create({
   },
   mt20: {
     marginTop: 20,
+  },
+  headerContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: 20,
+    marginTop: 10,
+  },
+  headerText: {
+    fontSize: 20,
+    fontWeight: "bold",
   },
 });
