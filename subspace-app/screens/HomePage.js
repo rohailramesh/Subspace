@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { supabase } from "../lib/supabase";
-
+import SubscriptionCard from "../components/SubscriptionCard";
 import { StyleSheet, View, Alert, Text, ScrollView } from "react-native";
 import { Button, Input } from "react-native-elements";
 export default function HomePage({ session }) {
@@ -87,22 +87,12 @@ export default function HomePage({ session }) {
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-        <Text>{session?.user?.email || "No user"}</Text>
-        <Text style={{ marginTop: 20 }}>User Subscriptions:</Text>
+        {/* <Text>{session?.user?.email || "No user"}</Text> */}
+        <Text style={{}}>User Subscriptions:</Text>
         <View>
           {subscriptions.map((subscription, index) => (
             <View key={index} style={styles.subscriptionItem}>
-              <Text>Name: {subscription.name}</Text>
-              <Text>Price: {subscription.price}</Text>
-              <Text>Start Date: {subscription.start_date}</Text>
-              <Text>End Date: {subscription.end_date}</Text>
-              <Text>Next Billing Date: {subscription.next_billing_date}</Text>
-              <Text>Category: {subscription.category}</Text>
-              <Text>Type: {subscription.type}</Text>
-              <Text>Billing Period: {subscription.billing_period}</Text>
-              <Text>Notes: {subscription.notes}</Text>
-              <Text>Status: {subscription.status}</Text>
-              <Text></Text>
+              <SubscriptionCard subscription={subscription} />
               {/* Display other subscription details */}
             </View>
           ))}
