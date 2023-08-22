@@ -5,6 +5,7 @@ import { Alert, StyleSheet, View } from "react-native";
 import { supabase } from "../lib/supabase";
 
 import { Button, Input } from "react-native-elements";
+import { ImageBackground } from "react-native";
 
 export default function Auth() {
   const [email, setEmail] = useState("");
@@ -38,7 +39,10 @@ export default function Auth() {
   }
 
   return (
-    <View style={styles.container}>
+    <ImageBackground
+      source={require("../assets/login-bg.jpg")}
+      style={styles.backgroundImage}
+    >
       <View style={[styles.verticallySpaced, styles.mt20]}>
         <Input
           label="Email"
@@ -62,11 +66,13 @@ export default function Auth() {
         />
       </View>
 
-      <View style={[styles.verticallySpaced, styles.mt20]}>
+      <View style={[styles.verticallySpaced, styles.mt50]}>
         <Button
           title="Sign in"
           disabled={loading}
           onPress={() => signInWithEmail()}
+          buttonStyle={styles.button} // Customize button background color
+          titleStyle={styles.buttonText} // Customize button text color
         />
       </View>
 
@@ -75,16 +81,23 @@ export default function Auth() {
           title="Sign up"
           disabled={loading}
           onPress={() => signUpWithEmail()}
+          buttonStyle={styles.button} // Customize button background color
+          titleStyle={styles.buttonText} // Customize button text color
         />
       </View>
-    </View>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 40,
+    flex: 1,
+    justifyContent: "center", // Center vertically
     padding: 12,
+  },
+  backgroundImage: {
+    flex: 1, // Take up the entire screen
+    resizeMode: "cover", // Adjust the image size to cover the entire container
   },
   verticallySpaced: {
     paddingTop: 4,
@@ -92,6 +105,15 @@ const styles = StyleSheet.create({
     alignSelf: "stretch",
   },
   mt20: {
-    marginTop: 20,
+    marginTop: 150,
+  },
+  mt50: {
+    marginTop: 350,
+  },
+  button: {
+    backgroundColor: "white", // Customize button background color
+  },
+  buttonText: {
+    color: "black", // Customize button text color
   },
 });
