@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { supabase } from "../lib/supabase";
-import { View, Text, TextInput, Button, StyleSheet } from "react-native";
+import { View, Text, TextInput, StyleSheet, Button } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
 import { DatePickerInput } from "react-native-paper-dates";
 

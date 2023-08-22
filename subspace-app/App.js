@@ -14,22 +14,7 @@ import Auth from "./screens/Auth";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
-function MainStack({ session }) {
-  return (
-    <Stack.Navigator>
-      <Stack.Screen
-        name="Home"
-        component={HomePage}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="Manage"
-        component={ManageScreen}
-        options={{ title: "Manage" }}
-      />
-    </Stack.Navigator>
-  );
-}
+
 export default function App() {
   const [session, setSession] = useState(null);
 
