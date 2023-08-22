@@ -15,7 +15,7 @@ export default function UpcomingPayments({ session }) {
         { event: "*", schema: "public", table: "subspace" },
         (payload) => {
           console.log("Change received!", payload);
-          fetchUserSubscriptions();
+          fetchUpcomingSubscriptions();
         }
       )
       .subscribe();
