@@ -122,6 +122,10 @@ export default function HomePage({ session }) {
           <View style={styles.headerContainer}>
             <Text style={styles.headerText}>All Subscriptions</Text>
             <IconButton
+              icon="refresh" // Replace with the name of the refresh icon
+              onPress={fetchUserSubscriptions} // Trigger the fetchUserSubscriptions function
+            />
+            <IconButton
               icon="logout" // Replace with the name of your PNG image (without the file extension)
               onPress={() => supabase.auth.signOut()}
             />

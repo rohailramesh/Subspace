@@ -31,6 +31,9 @@ const SubscriptionCard = ({ subscription, onDelete }) => {
         <Text variant="bodyMedium">
           <Text style={styles.boldText}>End Date:</Text> {subscription.end_date}
         </Text>
+        <Text variant="bodyMedium">
+          <Text style={styles.boldText}>Extra Notes:</Text> {subscription.notes}
+        </Text>
       </Card.Content>
       <Card.Actions>
         <Button onPress={onDelete}>Delete</Button>

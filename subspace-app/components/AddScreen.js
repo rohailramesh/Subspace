@@ -69,9 +69,9 @@ export default function AddScreen({ session }) {
       setStatus(null);
       setBillingPeriod(null);
       setCategory(null);
-      setStartDate(null);
-      setEndDate(null);
-      setNextBillingDate(null);
+      setStartDate(new Date());
+      setEndDate(new Date());
+      setNextBillingDate(new Date());
     }
   };
 

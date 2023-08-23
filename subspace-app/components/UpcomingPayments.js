@@ -72,7 +72,7 @@ export default function UpcomingPayments({ session }) {
       }
 
       // Fetch updated subscriptions
-      fetchUserSubscriptions();
+      fetchUpcomingSubscriptions();
     } catch (error) {
       console.error("Error deleting subscription:", error);
     } finally {
@@ -89,9 +89,11 @@ export default function UpcomingPayments({ session }) {
         <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
           {/* <Text>{session?.user?.email || "No user"}</Text> */}
           <View style={styles.headerContainer}>
-            <Text style={styles.headerText}>
-              Upcoming Subscription Payments
-            </Text>
+            <Text style={styles.headerText}>Upcoming Payments</Text>
+            <IconButton
+              icon="refresh" // Replace with the name of the refresh icon
+              onPress={fetchUpcomingSubscriptions} // Trigger the fetchUserSubscriptions function
+            />
             <IconButton
               icon="logout" // Replace with the name of your PNG image (without the file extension)
               onPress={() => supabase.auth.signOut()}
