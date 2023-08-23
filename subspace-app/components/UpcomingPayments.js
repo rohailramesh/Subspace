@@ -1,8 +1,16 @@
 import { useState, useEffect } from "react";
 import { supabase } from "../lib/supabase";
-import { View, Text, ScrollView, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  ScrollView,
+  StyleSheet,
+  ImageBackground,
+} from "react-native";
 import { Button } from "react-native-elements";
 import { useNavigation } from "@react-navigation/native";
+import SubscriptionCard from "./SubscriptionCard";
+import { IconButton } from "react-native-paper";
 export default function UpcomingPayments({ session }) {
   const [loading, setLoading] = useState(true);
   const [upcomingSubscriptions, setUpcomingSubscriptions] = useState([]);
@@ -53,25 +61,58 @@ export default function UpcomingPayments({ session }) {
     }
   }
 
+  async function deleteSubscription(id) {
+    try {
+      setLoading(true);
+
+      const { error } = await supabase.from("subspace").delete().eq("id", id);
+      console.log("deleted");
+      if (error) {
+        throw error;
+      }
+
+      // Fetch updated subscriptions
+      fetchUserSubscriptions();
+    } catch (error) {
+      console.error("Error deleting subscription:", error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
-    <View style={{ flex: 1, alignItems: "left", justifyContent: "left" }}>
-      <View style={styles.headerContainer}>
-        <Text style={styles.headerText}>User Subscriptions</Text>
-        <Button title="Sign Out" onPress={() => supabase.auth.signOut()} />
-      </View>
-      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-        {/* <Text>Upcoming Payments Screen</Text> */}
-        {/* Display upcomingSubscriptions */}
-        {upcomingSubscriptions.map((subscription, index) => (
-          <View key={index}>
-            <Text>Name: {subscription.name}</Text>
-            <Text>Price: {subscription.price}</Text>
-            <Text>Next Billing Date: {subscription.next_billing_date}</Text>
-            {/* Display other subscription details */}
+    <ImageBackground
+      source={require("../assets/homepage-bg.jpg")}
+      style={styles.backgroundImage}
+    >
+      <View style={styles.container}>
+        <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+          {/* <Text>{session?.user?.email || "No user"}</Text> */}
+          <View style={styles.headerContainer}>
+            <Text style={styles.headerText}>
+              Upcoming Subscription Payments
+            </Text>
+            <IconButton
+              icon="logout" // Replace with the name of your PNG image (without the file extension)
+              onPress={() => supabase.auth.signOut()}
+            />
           </View>
-        ))}
-      </ScrollView>
-    </View>
+          <View>
+            {upcomingSubscriptions.map((subscription, index) => (
+              <View key={index} style={styles.subscriptionItem}>
+                <SubscriptionCard
+                  subscription={subscription}
+                  onDelete={() => deleteSubscription(subscription.id)}
+                />
+                {/* Display other subscription details */}
+              </View>
+            ))}
+          </View>
+
+          {/* <Button title="Sign Out" onPress={() => supabase.auth.signOut()} /> */}
+        </ScrollView>
+      </View>
+    </ImageBackground>
   );
 }
 
@@ -79,6 +120,10 @@ const styles = StyleSheet.create({
   container: {
     marginTop: 40,
     padding: 12,
+  },
+  backgroundImage: {
+    flex: 1, // Take up the entire screen
+    resizeMode: "cover", // Adjust the image size to cover the entire container
   },
   verticallySpaced: {
     paddingTop: 4,
@@ -93,10 +138,10 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     paddingHorizontal: 20,
-    marginTop: 50,
+    marginTop: 10,
   },
   headerText: {
-    fontSize: 30,
+    fontSize: 20,
     fontWeight: "bold",
   },
 });

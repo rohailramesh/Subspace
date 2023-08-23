@@ -17,7 +17,7 @@ const SubscriptionCard = ({ subscription, onDelete }) => {
           <Text style={styles.boldText}>Status:</Text> {subscription.status}
         </Text>
         <Text variant="bodyMedium">
-          <Text style={styles.boldText}>Category:</Text>
+          <Text style={styles.boldText}>Category: </Text>
           {subscription.category}
         </Text>
         <Text variant="bodyMedium">

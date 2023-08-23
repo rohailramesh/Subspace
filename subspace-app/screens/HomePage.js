@@ -9,8 +9,7 @@ import {
   ScrollView,
   ImageBackground,
 } from "react-native";
-import { Button, Input } from "react-native-elements";
-import { useNavigation } from "@react-navigation/native";
+import { Dropdown } from "react-native-element-dropdown";
 import { IconButton } from "react-native-paper";
 export default function HomePage({ session }) {
   const [loading, setLoading] = useState(true);
@@ -121,7 +120,7 @@ export default function HomePage({ session }) {
         <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
           {/* <Text>{session?.user?.email || "No user"}</Text> */}
           <View style={styles.headerContainer}>
-            <Text style={styles.headerText}>My Subscriptions</Text>
+            <Text style={styles.headerText}>All Subscriptions</Text>
             <IconButton
               icon="logout" // Replace with the name of your PNG image (without the file extension)
               onPress={() => supabase.auth.signOut()}
