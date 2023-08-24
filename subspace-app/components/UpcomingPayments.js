@@ -95,7 +95,7 @@ export default function UpcomingPayments({ session }) {
               onPress={fetchUpcomingSubscriptions} // Trigger the fetchUserSubscriptions function
             />
             <IconButton
-              icon="logout" // Replace with the name of your PNG image (without the file extension)
+              icon="location-exit" // Replace with the name of your PNG image (without the file extension)
               onPress={() => supabase.auth.signOut()}
             />
           </View>

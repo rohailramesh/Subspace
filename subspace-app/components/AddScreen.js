@@ -1,9 +1,18 @@
 import React, { useState } from "react";
 import { supabase } from "../lib/supabase";
-import { View, Text, TextInput, StyleSheet, Button } from "react-native";
+import {
+  View,
+  TextInput,
+  StyleSheet,
+  ImageBackground,
+  ScrollView,
+} from "react-native";
+import { IconButton } from "react-native-paper";
+import { Button } from "react-native-elements";
 import { Dropdown } from "react-native-element-dropdown";
 import { DatePickerInput } from "react-native-paper-dates";
-
+import { Alert } from "react-native";
+import { Text } from "react-native-paper";
 const subscriptionTypes = [
   { label: "Paid", value: "Paid" },
   { label: "Trial", value: "Trial" },
@@ -46,6 +55,20 @@ export default function AddScreen({ session }) {
   const [isFocus, setIsFocus] = useState(false);
 
   const addSubscription = async () => {
+    if (
+      !name ||
+      !price ||
+      !type ||
+      !status ||
+      !category ||
+      !billingPeriod ||
+      !startDate ||
+      !nextBillingDate ||
+      !endDate
+    ) {
+      Alert.alert("Missing Fields", "Please fill in all required fields.");
+      return;
+    }
     const { data, error } = await supabase.from("subspace").insert({
       user_id: session.user.id,
       name: name,
@@ -75,121 +98,210 @@ export default function AddScreen({ session }) {
     }
   };
 
+  async function resetForm() {
+    setName("");
+    setPrice("");
+    setNotes("");
+    setType(null);
+    setStatus(null);
+    setBillingPeriod(null);
+    setCategory(null);
+    setStartDate(new Date());
+    setEndDate(new Date());
+    setNextBillingDate(new Date());
+  }
+
   return (
-    <View style={styles.container}>
-      <TextInput
-        value={name}
-        onChangeText={setName}
-        placeholder="Add Subscription Name"
-        required
-      />
+    <ImageBackground
+      source={require("../assets/homepage-bg.jpg")}
+      style={styles.backgroundImage}
+    >
+      <View style={styles.container}>
+        <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+          {/* <Text>{session?.user?.email || "No user"}</Text> */}
+          <View style={styles.headerContainer}>
+            <Text style={styles.headerText}>Add New Subscription</Text>
+            <IconButton
+              icon="lock-reset" // Replace with the name of the refresh icon
+              onPress={resetForm} // Trigger the fetchUserSubscriptions function
+            />
+            <IconButton
+              icon="location-exit" // Replace with the name of your PNG image (without the file extension)
+              onPress={() => supabase.auth.signOut()}
+            />
+          </View>
+          <View style={styles.fieldContainer}>
+            <Text variant="bodyMedium" style={styles.boldText}>
+              Subscription name:
+            </Text>
+            <TextInput
+              value={name}
+              onChangeText={setName}
+              placeholder="Add Subscription Name"
+              style={styles.input}
+              required
+            />
+          </View>
 
-      <TextInput
-        value={price}
-        onChangeText={setPrice}
-        placeholder="Add Subscription Price"
-        keyboardType="numeric"
-      />
+          <View style={styles.fieldContainer}>
+            <Text variant="bodyMedium" style={styles.boldText}>
+              Subscription price:
+            </Text>
+            <TextInput
+              value={price}
+              onChangeText={setPrice}
+              placeholder="Add Subscription Price"
+              keyboardType="numeric"
+              style={styles.input}
+            />
+          </View>
 
-      <TextInput
-        value={notes}
-        onChangeText={setNotes}
-        placeholder="Add extra notes regarding subscription"
-      />
+          <View style={styles.fieldContainer}>
+            <Text style={styles.boldText} variant="bodyMedium">
+              Extra notes:
+            </Text>
+            <TextInput
+              value={notes}
+              onChangeText={setNotes}
+              placeholder="Add extra notes regarding subscription"
+              style={styles.input}
+            />
+          </View>
 
-      <DatePickerInput
-        label="Subscription Start Date"
-        value={startDate}
-        onChange={(d) => setStartDate(d)}
-        inputMode="start"
-        style={{ width: 200 }}
-        mode="outlined"
-      />
+          <View style={styles.datePicker}>
+            <Text style={styles.boldText}>Subscription Start Date </Text>
+            <DatePickerInput
+              value={startDate}
+              onChange={(d) => setStartDate(d)}
+              inputMode="start"
+              style={{ width: 200 }}
+              mode="outlined"
+            />
+          </View>
 
-      <DatePickerInput
-        label="Subscription End Date"
-        value={endDate}
-        onChange={(d) => setEndDate(d)}
-        inputMode="start"
-        style={{ width: 200 }}
-        mode="outlined"
-      />
+          <View style={styles.datePicker}>
+            <Text style={styles.boldText}>Subscription End Date </Text>
+            <DatePickerInput
+              value={endDate}
+              onChange={(d) => setEndDate(d)}
+              inputMode="start"
+              style={{ width: 200 }}
+              mode="outlined"
+            />
+          </View>
 
-      <DatePickerInput
-        label="Subscription Next Billing Date"
-        value={nextBillingDate}
-        onChange={(d) => setNextBillingDate(d)}
-        inputMode="start"
-        style={{ width: 200 }}
-        mode="outlined"
-      />
+          <View style={styles.datePicker}>
+            <Text style={styles.boldText}>Subscription Next Billing Date </Text>
+            <DatePickerInput
+              value={nextBillingDate}
+              onChange={(d) => setNextBillingDate(d)}
+              inputMode="start"
+              style={{ width: 200, borderWidth: 0 }}
+              mode="outlined"
+            />
+          </View>
 
-      <Dropdown
-        style={[dropdownStyles.dropdown, isFocus && { borderColor: "blue" }]}
-        data={subscriptionTypes}
-        maxHeight={300}
-        labelField="label"
-        valueField="value"
-        placeholder={"Subscription Type"}
-        value={type}
-        onFocus={() => setIsFocus(true)}
-        onBlur={() => setIsFocus(false)}
-        onChange={(item) => {
-          setType(item.value);
-          setIsFocus(false);
-        }}
-      />
+          <View style={styles.dropdownBox}>
+            <Dropdown
+              style={[
+                dropdownStyles.dropdown,
+                isFocus && { borderColor: "blue" },
+              ]}
+              data={subscriptionTypes}
+              maxHeight={300}
+              labelField="label"
+              valueField="value"
+              placeholder={
+                <Text style={styles.boldText}>Subscription Type </Text>
+              }
+              value={type}
+              onFocus={() => setIsFocus(true)}
+              onBlur={() => setIsFocus(false)}
+              onChange={(item) => {
+                setType(item.value);
+                setIsFocus(false);
+              }}
+            />
+          </View>
 
-      <Dropdown
-        style={[dropdownStyles.dropdown, isFocus && { borderColor: "blue" }]}
-        data={subscriptionStatuses}
-        maxHeight={300}
-        labelField="label"
-        valueField="value"
-        placeholder={"Subscription Status"}
-        value={status}
-        onFocus={() => setIsFocus(true)}
-        onBlur={() => setIsFocus(false)}
-        onChange={(item) => {
-          setStatus(item.value);
-          setIsFocus(false);
-        }}
-      />
+          <View style={styles.dropdownBox}>
+            <Dropdown
+              style={[
+                dropdownStyles.dropdown,
+                isFocus && { borderColor: "blue" },
+              ]}
+              data={subscriptionStatuses}
+              maxHeight={300}
+              labelField="label"
+              valueField="value"
+              placeholder={
+                <Text style={styles.boldText}>Subscription Status</Text>
+              }
+              value={status}
+              onFocus={() => setIsFocus(true)}
+              onBlur={() => setIsFocus(false)}
+              onChange={(item) => {
+                setStatus(item.value);
+                setIsFocus(false);
+              }}
+            />
+          </View>
 
-      <Dropdown
-        style={[dropdownStyles.dropdown, isFocus && { borderColor: "blue" }]}
-        data={subscriptionCategories}
-        maxHeight={300}
-        labelField="label"
-        valueField="value"
-        placeholder={"Subscription Category"}
-        value={category}
-        onFocus={() => setIsFocus(true)}
-        onBlur={() => setIsFocus(false)}
-        onChange={(item) => {
-          setCategory(item.value);
-          setIsFocus(false);
-        }}
-      />
+          <View style={styles.dropdownBox}>
+            <Dropdown
+              style={[
+                dropdownStyles.dropdown,
+                isFocus && { borderColor: "blue" },
+              ]}
+              data={subscriptionCategories}
+              maxHeight={300}
+              labelField="label"
+              valueField="value"
+              placeholder={
+                <Text style={styles.boldText}>Subscription Category</Text>
+              }
+              value={category}
+              onFocus={() => setIsFocus(true)}
+              onBlur={() => setIsFocus(false)}
+              onChange={(item) => {
+                setCategory(item.value);
+                setIsFocus(false);
+              }}
+            />
+          </View>
 
-      <Dropdown
-        style={[dropdownStyles.dropdown, isFocus && { borderColor: "blue" }]}
-        data={billingPeriodType}
-        maxHeight={300}
-        labelField="label"
-        valueField="value"
-        placeholder={"Subscription Billing Period"}
-        value={billingPeriod}
-        onFocus={() => setIsFocus(true)}
-        onBlur={() => setIsFocus(false)}
-        onChange={(item) => {
-          setBillingPeriod(item.value);
-          setIsFocus(false);
-        }}
-      />
+          <View style={styles.dropdownBox}>
+            <Dropdown
+              style={[
+                dropdownStyles.dropdown,
+                isFocus && { borderColor: "blue" },
+              ]}
+              data={billingPeriodType}
+              maxHeight={300}
+              labelField="label"
+              valueField="value"
+              placeholder={
+                <Text style={styles.boldText}>Subscription Billing Period</Text>
+              }
+              value={billingPeriod}
+              onFocus={() => setIsFocus(true)}
+              onBlur={() => setIsFocus(false)}
+              onChange={(item) => {
+                setBillingPeriod(item.value);
+                setIsFocus(false);
+              }}
+            />
+          </View>
 
-      <Button title="Add Subscription" onPress={addSubscription} />
-    </View>
+          <Button
+            title="Add Subscription"
+            // type="clear"
+            onPress={addSubscription}
+            buttonStyle={[styles.button, styles.roundedButton]}
+          />
+        </ScrollView>
+      </View>
+    </ImageBackground>
   );
 }
 
@@ -198,14 +310,72 @@ const styles = StyleSheet.create({
     marginTop: 40,
     padding: 12,
   },
+  headerContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: 20,
+    marginTop: 10,
+  },
+  headerText: {
+    fontSize: 20,
+    fontWeight: "bold",
+  },
+  backgroundImage: {
+    flex: 1,
+    resizeMode: "cover",
+  },
+  fieldContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginBottom: 18,
+    // paddingHorizontal: 8,
+    paddingLeft: 6,
+    backgroundColor: "white", // Add a background color
+    borderRadius: 8,
+  },
+  boldText: {
+    fontWeight: "bold",
+  },
+  input: {
+    flex: 1,
+    marginLeft: 10,
+    borderWidth: 0.9,
+    borderColor: "black",
+    borderRadius: 8,
+    padding: 8,
+  },
+  dropdownBox: {
+    justifyContent: "space-between",
+    marginBottom: 18,
+    // flexDirection: "row",
+  },
+  datePicker: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginBottom: 18,
+    // paddingHorizontal: 8,
+    paddingLeft: 6,
+    backgroundColor: "white", // Add a background color
+    borderRadius: 8,
+  },
+  button: {
+    backgroundColor: "black", // Customize button background color
+  },
+  buttonText: {
+    color: "white", // Customize button text color
+  },
 });
 
 const dropdownStyles = StyleSheet.create({
   dropdown: {
     height: 50,
-    borderColor: "gray",
-    borderWidth: 0.5,
+    // borderColor: "gray",
+    // borderWidth: 0.5,
     borderRadius: 8,
     paddingHorizontal: 8,
+    backgroundColor: "white",
   },
 });

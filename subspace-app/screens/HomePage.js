@@ -126,7 +126,7 @@ export default function HomePage({ session }) {
               onPress={fetchUserSubscriptions} // Trigger the fetchUserSubscriptions function
             />
             <IconButton
-              icon="logout" // Replace with the name of your PNG image (without the file extension)
+              icon="location-exit" // Replace with the name of your PNG image (without the file extension)
               onPress={() => supabase.auth.signOut()}
             />
           </View>
