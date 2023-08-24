@@ -10,7 +10,7 @@ import {
   ImageBackground,
 } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
-import { IconButton } from "react-native-paper";
+import { IconButton, Card } from "react-native-paper";
 export default function HomePage({ session }) {
   const [loading, setLoading] = useState(true);
   const [username, setUsername] = useState("");
@@ -131,15 +131,27 @@ export default function HomePage({ session }) {
             />
           </View>
           <View>
-            {subscriptions.map((subscription, index) => (
-              <View key={index} style={styles.subscriptionItem}>
-                <SubscriptionCard
-                  subscription={subscription}
-                  onDelete={() => deleteSubscription(subscription.id)}
-                />
-                {/* Display other subscription details */}
+            {subscriptions.length === 0 ? (
+              // Render the card for no subscriptions
+              <Card style={styles.outlinedCard}>
+                <Card.Content>
+                  <Text variant="titleLarge">Add a new subscription</Text>
+                </Card.Content>
+              </Card>
+            ) : (
+              // Render the subscriptions
+              <View>
+                {subscriptions.map((subscription, index) => (
+                  <View key={index} style={styles.subscriptionItem}>
+                    <SubscriptionCard
+                      subscription={subscription}
+                      onDelete={() => deleteSubscription(subscription.id)}
+                    />
+                    {/* Display other subscription details */}
+                  </View>
+                ))}
               </View>
-            ))}
+            )}
           </View>
 
           {/* <Button title="Sign Out" onPress={() => supabase.auth.signOut()} /> */}

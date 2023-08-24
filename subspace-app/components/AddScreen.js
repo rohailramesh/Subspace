@@ -85,6 +85,10 @@ export default function AddScreen({ session }) {
     if (error) {
       console.log(error);
     } else {
+      Alert.alert(
+        "Subscription Added",
+        "Please refresh your subscriptions if needed"
+      );
       setName("");
       setPrice("");
       setNotes("");
