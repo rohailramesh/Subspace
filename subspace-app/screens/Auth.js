@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Alert, StyleSheet, View, KeyboardAvoidingView } from "react-native";
 import { supabase } from "../lib/supabase";
 import { Button, Input, Icon } from "react-native-elements";
@@ -7,6 +7,7 @@ import { ImageBackground } from "react-native";
 export default function Auth() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
   const [loading, setLoading] = useState(false);
   const [isSignUp, setIsSignUp] = useState(false);
   const [secureTextEntry, setSecureTextEntry] = useState(true);
@@ -19,6 +20,7 @@ export default function Auth() {
         email: email,
         password: password,
       });
+      Alert.alert("Success", "Please verify your email and login");
       setEmail("");
       setPassword("");
       if (error) Alert.alert(error.message);
@@ -41,6 +43,24 @@ export default function Auth() {
         style={styles.backgroundImage}
       >
         <View style={styles.container}>
+          {/* {isSignUp && ( // Conditionally render username input only on Sign Up
+            <View style={styles.verticallySpaced}>
+              <Input
+                label="Name"
+                leftIcon={{
+                  type: "font-awesome",
+                  name: "user",
+                  color: "white",
+                }}
+                onChangeText={(text) => setName(text)}
+                value={name}
+                placeholder="Your name"
+                autoCapitalize="none"
+                style={{ color: "white" }}
+              />
+            </View>
+          )} */}
+
           <View style={[styles.verticallySpaced]}>
             <Input
               label="Email"
@@ -77,7 +97,6 @@ export default function Auth() {
               style={{ color: "white" }}
             />
           </View>
-
           <View style={[styles.verticallySpaced]}>
             <Button
               title={isSignUp ? "Sign Up" : "Sign In"}

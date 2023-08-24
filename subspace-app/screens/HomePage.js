@@ -6,17 +6,20 @@ import {
   View,
   Alert,
   Text,
+  TextInput,
   ScrollView,
   ImageBackground,
 } from "react-native";
+import { Input, Button } from "react-native-elements";
 import { Dropdown } from "react-native-element-dropdown";
 import { IconButton, Card } from "react-native-paper";
 export default function HomePage({ session }) {
   const [loading, setLoading] = useState(true);
-  const [username, setUsername] = useState("");
-  // const [website, setWebsite] = useState("");
-  // const [avatarUrl, setAvatarUrl] = useState("");
   const [subscriptions, setSubscriptions] = useState([]);
+  const [name, setName] = useState("");
+  const [inputDisplay, setInputDisplay] = useState(true);
+  const [nameSaved, setNameSaved] = useState(false);
+
   useEffect(() => {
     // console.log(session.user.id);
     getProfile();
@@ -48,20 +51,41 @@ export default function HomePage({ session }) {
 
       let { data, error, status } = await supabase
         .from("profile")
-        .select(`id, email`)
+        .select(`id, name, email`) // Include the 'name' field
         .eq("id", session.user.id)
         .single();
 
-      // console.log(data);
+      console.log(!name);
       if (error && status !== 406) {
         throw error;
       }
-
       if (data) {
-        // setUsername(data.username);
-        // console.log(data);
-        // setWebsite(data.website);
-        // setAvatarUrl(data.avatar_url);
+        setName(data.name);
+      }
+    } catch (error) {
+      Alert.alert(error.message);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function updateProfile() {
+    try {
+      setLoading(true);
+
+      if (!session?.user) throw new Error("No user on the session!");
+
+      let { error } = await supabase.from("profile").upsert({
+        id: session?.user.id,
+        name: name,
+      });
+
+      if (error) {
+        throw error;
+      } else {
+        setName(name);
+        setNameSaved(true); // Set the nameSaved state to true
+        console.log("Name saved");
       }
     } catch (error) {
       Alert.alert(error.message);
@@ -130,7 +154,43 @@ export default function HomePage({ session }) {
               onPress={() => supabase.auth.signOut()}
             />
           </View>
+
           <View>
+            {/* {inputDisplay && (
+              <View>
+                <Text>Name:</Text>
+                <TextInput
+                  value={name}
+                  onChangeText={setName}
+                  placeholder="Enter Name"
+                />
+                <Button
+                  title="Save Name"
+                  onPress={() => {
+                    setInputDisplay(false); // Hide the input and button after saving
+                    updateProfile();
+                  }}
+                />
+              </View>
+            )} */}
+            {!nameSaved && (
+              <View>
+                <Text>Name:</Text>
+                <TextInput
+                  value={name}
+                  onChangeText={setName}
+                  placeholder="Enter Name"
+                />
+                <Button
+                  title="Save Name"
+                  onPress={() => {
+                    setNameSaved(true); // Set the nameSaved state to true
+                    updateProfile();
+                  }}
+                />
+              </View>
+            )}
+
             {subscriptions.length === 0 ? (
               // Render the card for no subscriptions
               <Card style={styles.outlinedCard}>

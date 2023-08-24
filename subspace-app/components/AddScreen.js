@@ -173,7 +173,7 @@ export default function AddScreen({ session }) {
           </View>
 
           <View style={styles.datePicker}>
-            <Text style={styles.boldText}>Subscription Start Date </Text>
+            <Text style={styles.boldText}>Start Date </Text>
             <DatePickerInput
               value={startDate}
               onChange={(d) => setStartDate(d)}
@@ -184,7 +184,7 @@ export default function AddScreen({ session }) {
           </View>
 
           <View style={styles.datePicker}>
-            <Text style={styles.boldText}>Subscription End Date </Text>
+            <Text style={styles.boldText}>End Date </Text>
             <DatePickerInput
               value={endDate}
               onChange={(d) => setEndDate(d)}
@@ -195,7 +195,7 @@ export default function AddScreen({ session }) {
           </View>
 
           <View style={styles.datePicker}>
-            <Text style={styles.boldText}>Subscription Next Billing Date </Text>
+            <Text style={styles.boldText}>Next Billing Date </Text>
             <DatePickerInput
               value={nextBillingDate}
               onChange={(d) => setNextBillingDate(d)}
