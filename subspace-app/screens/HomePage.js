@@ -16,9 +16,6 @@ import { IconButton, Card } from "react-native-paper";
 export default function HomePage({ session }) {
   const [loading, setLoading] = useState(true);
   const [subscriptions, setSubscriptions] = useState([]);
-  const [name, setName] = useState("");
-  const [inputDisplay, setInputDisplay] = useState(true);
-  const [nameSaved, setNameSaved] = useState(false);
 
   useEffect(() => {
     // console.log(session.user.id);
@@ -51,41 +48,12 @@ export default function HomePage({ session }) {
 
       let { data, error, status } = await supabase
         .from("profile")
-        .select(`id, name, email`) // Include the 'name' field
+        .select(`id, email`) // Include the 'name' field
         .eq("id", session.user.id)
         .single();
 
-      console.log(!name);
       if (error && status !== 406) {
         throw error;
-      }
-      if (data) {
-        setName(data.name);
-      }
-    } catch (error) {
-      Alert.alert(error.message);
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  async function updateProfile() {
-    try {
-      setLoading(true);
-
-      if (!session?.user) throw new Error("No user on the session!");
-
-      let { error } = await supabase.from("profile").upsert({
-        id: session?.user.id,
-        name: name,
-      });
-
-      if (error) {
-        throw error;
-      } else {
-        setName(name);
-        setNameSaved(true); // Set the nameSaved state to true
-        console.log("Name saved");
       }
     } catch (error) {
       Alert.alert(error.message);
@@ -156,46 +124,13 @@ export default function HomePage({ session }) {
           </View>
 
           <View>
-            {/* {inputDisplay && (
-              <View>
-                <Text>Name:</Text>
-                <TextInput
-                  value={name}
-                  onChangeText={setName}
-                  placeholder="Enter Name"
-                />
-                <Button
-                  title="Save Name"
-                  onPress={() => {
-                    setInputDisplay(false); // Hide the input and button after saving
-                    updateProfile();
-                  }}
-                />
-              </View>
-            )} */}
-            {!nameSaved && (
-              <View>
-                <Text>Name:</Text>
-                <TextInput
-                  value={name}
-                  onChangeText={setName}
-                  placeholder="Enter Name"
-                />
-                <Button
-                  title="Save Name"
-                  onPress={() => {
-                    setNameSaved(true); // Set the nameSaved state to true
-                    updateProfile();
-                  }}
-                />
-              </View>
-            )}
-
             {subscriptions.length === 0 ? (
               // Render the card for no subscriptions
               <Card style={styles.outlinedCard}>
                 <Card.Content>
-                  <Text variant="titleLarge">Add a new subscription</Text>
+                  <Text variant="titleLarge">
+                    No Subscription Found! Add a new subscription
+                  </Text>
                 </Card.Content>
               </Card>
             ) : (

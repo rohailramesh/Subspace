@@ -8,6 +8,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import HomePage from "./screens/HomePage";
 import ManageScreen from "./components/UpcomingPayments";
+import Profile from "./components/Profile";
 import AddScreen from "./components/AddScreen";
 import UpcomingPayments from "./components/UpcomingPayments";
 import Auth from "./screens/Auth";
@@ -104,6 +105,24 @@ export default function App() {
                 />
               ),
               tabBarLabel: "Payments",
+              headerShown: false,
+            }}
+          />
+          <Tab.Screen
+            name="My Profile"
+            children={() => <Profile session={session} />}
+            options={{
+              tabBarIcon: ({ focused }) => (
+                <Image
+                  source={require("./assets/icons/user.png")}
+                  style={{
+                    width: 25,
+                    height: 25,
+                    tintColor: focused ? "#007AFF" : "#8E8E93",
+                  }}
+                />
+              ),
+              tabBarLabel: "Profile",
               headerShown: false,
             }}
           />
