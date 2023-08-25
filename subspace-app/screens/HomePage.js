@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { supabase } from "../lib/supabase";
 import SubscriptionCard from "../components/SubscriptionCard";
+import { Navigation } from "react-native-navigation";
 import {
   StyleSheet,
   View,
@@ -16,6 +17,7 @@ import { IconButton, Card } from "react-native-paper";
 export default function HomePage({ session }) {
   const [loading, setLoading] = useState(true);
   const [subscriptions, setSubscriptions] = useState([]);
+  const [name, setName] = useState("");
 
   useEffect(() => {
     // console.log(session.user.id);
@@ -48,13 +50,15 @@ export default function HomePage({ session }) {
 
       let { data, error, status } = await supabase
         .from("profile")
-        .select(`id, email`) // Include the 'name' field
+        .select(`id, email, name`) // Include the 'name' field
         .eq("id", session.user.id)
         .single();
 
       if (error && status !== 406) {
         throw error;
       }
+      setName(data.name);
+      console.log(name);
     } catch (error) {
       Alert.alert(error.message);
     } finally {
@@ -95,6 +99,7 @@ export default function HomePage({ session }) {
       }
 
       // Fetch updated subscriptions
+      Alert.alert("Success", "Subscription delete successfully");
       fetchUserSubscriptions();
     } catch (error) {
       console.error("Error deleting subscription:", error);
@@ -112,7 +117,12 @@ export default function HomePage({ session }) {
         <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
           {/* <Text>{session?.user?.email || "No user"}</Text> */}
           <View style={styles.headerContainer}>
-            <Text style={styles.headerText}>All Subscriptions</Text>
+            {!name ? (
+              <Text style={styles.headerText}>Subspace</Text>
+            ) : (
+              <Text style={styles.headerText}>{name}'s Subspace</Text>
+            )}
+
             <IconButton
               icon="refresh" // Replace with the name of the refresh icon
               onPress={fetchUserSubscriptions} // Trigger the fetchUserSubscriptions function

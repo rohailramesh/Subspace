@@ -43,6 +43,7 @@ export default function Profile({ session }) {
       if (data) {
         setName(data.name);
       }
+      //   Alert.alert("Success", "Name saved");
     } catch (error) {
       Alert.alert(error.message);
     } finally {
@@ -65,7 +66,7 @@ export default function Profile({ session }) {
         throw error;
       } else {
         setName(name);
-        setNameSaved(true); // Set the nameSaved state to true
+        // setNameSaved(true); // Set the nameSaved state to true
         console.log("Name saved");
       }
     } catch (error) {
@@ -84,7 +85,11 @@ export default function Profile({ session }) {
         <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
           {/* <Text>{session?.user?.email || "No user"}</Text> */}
           <View style={styles.headerContainer}>
-            <Text style={styles.headerText}>All Subscriptions</Text>
+            {!name ? (
+              <Text style={styles.headerText}>Profile</Text>
+            ) : (
+              <Text style={styles.headerText}>{name}'s Profile</Text>
+            )}
             <IconButton
               icon="location-exit" // Replace with the name of your PNG image (without the file extension)
               onPress={() => supabase.auth.signOut()}
@@ -92,18 +97,22 @@ export default function Profile({ session }) {
           </View>
           <View>
             <View>
-              <Text>Name:</Text>
-              <TextInput
-                value={name}
-                onChangeText={setName}
-                placeholder="Enter Name"
-              />
+              <View style={styles.fieldContainer}>
+                <Text style={styles.boldText}>Name:</Text>
+                <TextInput
+                  value={name}
+                  onChangeText={setName}
+                  placeholder="Enter Name"
+                  style={styles.input}
+                />
+              </View>
               <Button
                 title="Save Name"
                 onPress={() => {
-                  setNameSaved(true); // Set the nameSaved state to true
+                  setName(name); // Set the nameSaved state to true
                   updateProfile();
                 }}
+                buttonStyle={[styles.button, styles.roundedButton]}
               />
             </View>
           </View>
@@ -139,6 +148,33 @@ const styles = StyleSheet.create({
   },
   headerText: {
     fontSize: 20,
+    fontWeight: "bold",
+  },
+  input: {
+    flex: 1,
+    marginLeft: 10,
+    borderWidth: 0.9,
+    borderColor: "black",
+    borderRadius: 8,
+    padding: 8,
+  },
+  button: {
+    backgroundColor: "black", // Customize button background color
+  },
+  buttonText: {
+    color: "white", // Customize button text color
+  },
+  fieldContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginBottom: 18,
+    // paddingHorizontal: 8,
+    paddingLeft: 6,
+    backgroundColor: "white", // Add a background color
+    borderRadius: 8,
+  },
+  boldText: {
     fontWeight: "bold",
   },
 });

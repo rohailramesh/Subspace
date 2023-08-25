@@ -6,6 +6,7 @@ import {
   ScrollView,
   StyleSheet,
   ImageBackground,
+  Alert,
 } from "react-native";
 import { Button } from "react-native-elements";
 import { useNavigation } from "@react-navigation/native";
@@ -71,6 +72,7 @@ export default function UpcomingPayments({ session }) {
         throw error;
       }
 
+      Alert.alert("Success", "Subscription delete successfully");
       // Fetch updated subscriptions
       fetchUpcomingSubscriptions();
     } catch (error) {
