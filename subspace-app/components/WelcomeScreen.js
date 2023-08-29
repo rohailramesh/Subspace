@@ -48,11 +48,10 @@ const WelcomeScreen = ({ session, onWelcomeComplete }) => {
   return (
     <View style={styles.container}>
       {/* Your welcome screen UI here */}
-      <Text>{name.length === 0 ? "Welcome" : `Welcome, ${name}`}</Text>
-      <Image
-        source={require("../assets/subspace-logo.png")}
-        style={styles.image}
-      />
+      <Text style={{ fontSize: 24 }}>
+        {name.length === 0 ? "Welcome" : `Welcome, ${name}`}
+      </Text>
+      <Image source={require("../assets/welcome.jpeg")} style={styles.image} />
     </View>
   );
 };
@@ -65,8 +64,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
   },
   image: {
-    width: 200,
+    width: 300,
     height: 200,
+    marginLeft: 10,
   },
 });
 

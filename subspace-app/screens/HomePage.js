@@ -108,6 +108,7 @@ export default function HomePage({ session }) {
   const filteredSubs = subscriptions.filter((sub) => {
     return sub.name.includes(searchQuery);
   });
+  const subscriptionCount = subscriptions.length;
 
   return (
     <ImageBackground

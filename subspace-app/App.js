@@ -12,7 +12,6 @@ import UpcomingPayments from "./components/UpcomingPayments";
 import Auth from "./screens/Auth";
 import WelcomeScreen from "./components/WelcomeScreen";
 const Tab = createBottomTabNavigator();
-const Stack = createNativeStackNavigator();
 
 export default function App() {
   const [session, setSession] = useState(null);
