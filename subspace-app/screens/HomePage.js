@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { supabase } from "../lib/supabase";
 import SubscriptionCard from "../components/SubscriptionCard";
-import { Navigation } from "react-native-navigation";
 import {
   StyleSheet,
   View,
@@ -11,13 +10,12 @@ import {
   ScrollView,
   ImageBackground,
 } from "react-native";
-import { Input, Button } from "react-native-elements";
-import { Dropdown } from "react-native-element-dropdown";
 import { IconButton, Card } from "react-native-paper";
 export default function HomePage({ session }) {
   const [loading, setLoading] = useState(true);
   const [subscriptions, setSubscriptions] = useState([]);
   const [name, setName] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     // console.log(session.user.id);
@@ -107,6 +105,9 @@ export default function HomePage({ session }) {
       setLoading(false);
     }
   }
+  const filteredSubs = subscriptions.filter((sub) => {
+    return sub.name.includes(searchQuery);
+  });
 
   return (
     <ImageBackground
@@ -146,20 +147,35 @@ export default function HomePage({ session }) {
             ) : (
               // Render the subscriptions
               <View>
-                {subscriptions.map((subscription, index) => (
-                  <View key={index} style={styles.subscriptionItem}>
-                    <SubscriptionCard
-                      subscription={subscription}
-                      onDelete={() => deleteSubscription(subscription.id)}
-                    />
-                    {/* Display other subscription details */}
-                  </View>
+                <TextInput
+                  style={styles.searchInput}
+                  value={searchQuery}
+                  onChangeText={setSearchQuery}
+                  placeholder="Search Subscription By Name..."
+                  placeholderTextColor="white"
+                  style={styles.input}
+                />
+
+                {filteredSubs.map((sub) => (
+                  <SubscriptionCard
+                    key={sub.id}
+                    subscription={sub}
+                    onDelete={() => deleteSubscription(sub.id)}
+                  />
                 ))}
               </View>
+              // <View>
+              //   {subscriptions.map((subscription, index) => (
+              //     <View key={index} style={styles.subscriptionItem}>
+              //       <SubscriptionCard
+              //         subscription={subscription}
+              //         onDelete={() => deleteSubscription(subscription.id)}
+              //       />
+              //     </View>
+              //   ))}
+              // </View>
             )}
           </View>
-
-          {/* <Button title="Sign Out" onPress={() => supabase.auth.signOut()} /> */}
         </ScrollView>
       </View>
     </ImageBackground>
@@ -182,6 +198,14 @@ const styles = StyleSheet.create({
   },
   mt20: {
     marginTop: 20,
+  },
+  input: {
+    flex: 1,
+    marginBottom: 5,
+    borderWidth: 0.9,
+    borderColor: "black",
+    borderRadius: 8,
+    padding: 8,
   },
   headerContainer: {
     flexDirection: "row",
