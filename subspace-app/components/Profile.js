@@ -16,6 +16,8 @@ import { IconButton, Card } from "react-native-paper";
 export default function Profile({ session }) {
   const [loading, setLoading] = useState(true);
   const [name, setName] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   useEffect(() => {
     // console.log(session.user.id);
@@ -76,6 +78,36 @@ export default function Profile({ session }) {
     }
   }
 
+  async function updatePassword() {
+    try {
+      if (!session?.user) {
+        throw new Error("No user on the session!");
+      }
+
+      if (password !== confirmPassword) {
+        throw new Error("Passwords do not match!");
+      }
+
+      setLoading(true);
+
+      const { error } = await supabase.auth.updateUser({
+        password: password,
+      });
+
+      if (error) {
+        throw error;
+      } else {
+        Alert.alert("Success", "Password updated");
+      }
+    } catch (error) {
+      Alert.alert(error.message);
+    } finally {
+      setLoading(false);
+      setPassword("");
+      setConfirmPassword("");
+    }
+  }
+
   return (
     <ImageBackground
       source={require("../assets/homepage-bg.jpg")}
@@ -115,6 +147,33 @@ export default function Profile({ session }) {
                 buttonStyle={[styles.button, styles.roundedButton]}
               />
             </View>
+          </View>
+          <View style={{ marginTop: 15 }}>
+            <View style={styles.fieldContainer}>
+              <Text style={styles.boldText}>New Password:</Text>
+              <TextInput
+                value={password}
+                onChangeText={setPassword}
+                placeholder="Enter New Password"
+                secureTextEntry
+                style={styles.input}
+              />
+            </View>
+            <View style={styles.fieldContainer}>
+              <Text style={styles.boldText}>Confirm Password:</Text>
+              <TextInput
+                value={confirmPassword}
+                onChangeText={setConfirmPassword}
+                placeholder="Confirm New Password"
+                secureTextEntry
+                style={styles.input}
+              />
+            </View>
+            <Button
+              title="Update Password"
+              onPress={updatePassword}
+              buttonStyle={[styles.button, styles.roundedButton]}
+            />
           </View>
         </ScrollView>
       </View>
