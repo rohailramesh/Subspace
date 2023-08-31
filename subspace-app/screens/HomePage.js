@@ -200,6 +200,15 @@ const styles = StyleSheet.create({
   mt20: {
     marginTop: 20,
   },
+  outlinedCard: {
+    padding: 5,
+    backgroundColor: "white",
+    borderWidth: 2,
+    // borderColor: "black",
+    borderRadius: 10,
+    marginBottom: 10, // Add margin bottom to create a gap between cards
+    // overflow: 'hidden', // You can keep or remove this line based on your design
+  },
   input: {
     flex: 1,
     marginBottom: 5,

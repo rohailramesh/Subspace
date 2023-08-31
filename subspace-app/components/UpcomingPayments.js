@@ -104,33 +104,47 @@ export default function UpcomingPayments({ session }) {
             />
           </View>
           <View>
-            {upcomingSubscriptions.map((subscription, index) => (
-              <View key={index} style={styles.subscriptionItem}>
-                <Card style={styles.outlinedCard}>
-                  <Card.Content>
-                    <Text variant="titleLarge">
-                      <Text style={styles.boldText}>Name: </Text>
-                      {subscription.name}
-                    </Text>
-                    <Text variant="bodyMedium">
-                      <Text style={styles.boldText}>Upcoming payment of:</Text>{" "}
-                      £{subscription.price}
-                    </Text>
-                    <Text variant="bodyMedium">
-                      <Text style={styles.boldText}>Billing Date:</Text>{" "}
-                      {subscription.next_billing_date}
-                    </Text>
-                    <Button
-                      mode="contained"
-                      style={styles.button}
-                      onPress={() => deleteSubscription(subscription.id)} // Call the deleteSubscription function here
-                    >
-                      Delete Subscription
-                    </Button>
-                  </Card.Content>
-                </Card>
+            {upcomingSubscriptions.length === 0 ? (
+              // Render the card for no subscriptions
+              <Card style={styles.outlinedCard}>
+                <Card.Content>
+                  <Text variant="titleLarge">No Upcoming Payments</Text>
+                </Card.Content>
+              </Card>
+            ) : (
+              // Render the subscriptions
+              <View>
+                {upcomingSubscriptions.map((subscription, index) => (
+                  <View key={index} style={styles.subscriptionItem}>
+                    <Card style={styles.outlinedCard}>
+                      <Card.Content>
+                        <Text variant="titleLarge">
+                          <Text style={styles.boldText}>Name: </Text>
+                          {subscription.name}
+                        </Text>
+                        <Text variant="bodyMedium">
+                          <Text style={styles.boldText}>
+                            Upcoming payment of:
+                          </Text>{" "}
+                          £{subscription.price}
+                        </Text>
+                        <Text variant="bodyMedium">
+                          <Text style={styles.boldText}>Billing Date:</Text>{" "}
+                          {subscription.next_billing_date}
+                        </Text>
+                        <Button
+                          mode="contained"
+                          style={styles.button}
+                          onPress={() => deleteSubscription(subscription.id)} // Call the deleteSubscription function here
+                        >
+                          Delete Subscription
+                        </Button>
+                      </Card.Content>
+                    </Card>
+                  </View>
+                ))}
               </View>
-            ))}
+            )}
           </View>
         </ScrollView>
       </View>
