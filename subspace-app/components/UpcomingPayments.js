@@ -8,10 +8,9 @@ import {
   ImageBackground,
   Alert,
 } from "react-native";
-import { Button } from "react-native-elements";
 import { useNavigation } from "@react-navigation/native";
 import SubscriptionCard from "./SubscriptionCard";
-import { IconButton } from "react-native-paper";
+import { IconButton, Card, Button } from "react-native-paper";
 export default function UpcomingPayments({ session }) {
   const [loading, setLoading] = useState(true);
   const [upcomingSubscriptions, setUpcomingSubscriptions] = useState([]);
@@ -72,7 +71,10 @@ export default function UpcomingPayments({ session }) {
         throw error;
       }
 
-      Alert.alert("Success", "Subscription delete successfully");
+      Alert.alert(
+        "Subscription delete successfully",
+        "Please refresh home page"
+      );
       // Fetch updated subscriptions
       fetchUpcomingSubscriptions();
     } catch (error) {
@@ -104,16 +106,32 @@ export default function UpcomingPayments({ session }) {
           <View>
             {upcomingSubscriptions.map((subscription, index) => (
               <View key={index} style={styles.subscriptionItem}>
-                <SubscriptionCard
-                  subscription={subscription}
-                  onDelete={() => deleteSubscription(subscription.id)}
-                />
-                {/* Display other subscription details */}
+                <Card style={styles.outlinedCard}>
+                  <Card.Content>
+                    <Text variant="titleLarge">
+                      <Text style={styles.boldText}>Name: </Text>
+                      {subscription.name}
+                    </Text>
+                    <Text variant="bodyMedium">
+                      <Text style={styles.boldText}>Upcoming payment of:</Text>{" "}
+                      £{subscription.price}
+                    </Text>
+                    <Text variant="bodyMedium">
+                      <Text style={styles.boldText}>Billing Date:</Text>{" "}
+                      {subscription.next_billing_date}
+                    </Text>
+                    <Button
+                      mode="contained"
+                      style={styles.button}
+                      onPress={() => deleteSubscription(subscription.id)} // Call the deleteSubscription function here
+                    >
+                      Delete Subscription
+                    </Button>
+                  </Card.Content>
+                </Card>
               </View>
             ))}
           </View>
-
-          {/* <Button title="Sign Out" onPress={() => supabase.auth.signOut()} /> */}
         </ScrollView>
       </View>
     </ImageBackground>
@@ -150,5 +168,24 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 20,
     fontWeight: "bold",
+  },
+  outlinedCard: {
+    padding: 5,
+    backgroundColor: "white",
+    borderWidth: 2,
+    // borderColor: "black",
+    borderRadius: 10,
+    marginBottom: 10, // Add margin bottom to create a gap between cards
+    // overflow: 'hidden', // You can keep or remove this line based on your design
+  },
+  boldText: {
+    fontWeight: "bold",
+  },
+  button: {
+    backgroundColor: "black", // Customize button background color
+    marginTop: 10,
+  },
+  buttonText: {
+    color: "white", // Customize button text color
   },
 });

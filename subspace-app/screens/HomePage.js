@@ -149,7 +149,7 @@ export default function HomePage({ session }) {
               // Render the subscriptions
               <View>
                 <TextInput
-                  style={styles.searchInput}
+                  // style={styles.searchInput}
                   value={searchQuery}
                   onChangeText={setSearchQuery}
                   placeholder="Search Subscription By Name..."
