@@ -1,8 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { Alert, StyleSheet, View, KeyboardAvoidingView } from "react-native";
+import {
+  Alert,
+  StyleSheet,
+  View,
+  KeyboardAvoidingView,
+  Text,
+} from "react-native";
 import { supabase } from "../lib/supabase";
 import { Button, Input, Icon } from "react-native-elements";
 import { ImageBackground } from "react-native";
+import * as Font from "expo-font";
 
 export default function Auth() {
   const [email, setEmail] = useState("");
@@ -11,6 +18,7 @@ export default function Auth() {
   const [loading, setLoading] = useState(false);
   const [isSignUp, setIsSignUp] = useState(false);
   const [secureTextEntry, setSecureTextEntry] = useState(true);
+  const [fontsLoaded, setFontsLoaded] = useState(false);
 
   async function handleAuthentication() {
     setLoading(true);
@@ -34,6 +42,20 @@ export default function Auth() {
     }
 
     setLoading(false);
+  }
+  async function loadFonts() {
+    await Font.loadAsync({
+      "bubblegum-sans": require("../assets/fonts/Bubblegum_Sans/BubblegumSans-Regular.ttf"),
+    });
+    setFontsLoaded(true);
+  }
+
+  useEffect(() => {
+    loadFonts();
+  }, []);
+
+  if (!fontsLoaded) {
+    return null;
   }
 
   return (
@@ -60,6 +82,9 @@ export default function Auth() {
               />
             </View>
           )} */}
+          <View>
+            <Text style={[styles.appName]}>SUBSPACE</Text>
+          </View>
 
           <View style={[styles.verticallySpaced]}>
             <Input
@@ -139,7 +164,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center", // Center vertically
     padding: 12,
-    marginTop: 20,
+    marginTop: 75,
   },
   backgroundImage: {
     flex: 1, // Take up the entire screen
@@ -180,5 +205,12 @@ const styles = StyleSheet.create({
 
   roundedButton: {
     borderRadius: 5, // Adjust the value as needed
+  },
+  appName: {
+    fontFamily: "bubblegum-sans", // Use the registered font family here
+    fontSize: 38, // Adjust the font size as needed
+    color: "white", // Customize the font color
+    textAlign: "center",
+    marginBottom: 20,
   },
 });
