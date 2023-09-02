@@ -69,6 +69,16 @@ export default function AddScreen({ session }) {
       Alert.alert("Missing Fields", "Please fill in all required fields.");
       return;
     }
+
+    const adjustedNextBillingDate = new Date(nextBillingDate);
+    adjustedNextBillingDate.setDate(adjustedNextBillingDate.getDate() + 1);
+
+    const adjustStartDate = new Date(startDate);
+    adjustStartDate.setDate(adjustStartDate.getDate() + 1);
+
+    const adjustEndDate = new Date(endDate);
+    adjustEndDate.setDate(adjustEndDate.getDate() + 1);
+
     const { data, error } = await supabase.from("subspace").insert({
       user_id: session.user.id,
       name: name,
@@ -78,9 +88,9 @@ export default function AddScreen({ session }) {
       category: category,
       billing_period: billingPeriod,
       notes: notes,
-      start_date: startDate,
-      end_date: endDate,
-      next_billing_date: nextBillingDate,
+      start_date: adjustStartDate,
+      end_date: adjustEndDate,
+      next_billing_date: adjustedNextBillingDate,
     });
     if (error) {
       console.log(error);
