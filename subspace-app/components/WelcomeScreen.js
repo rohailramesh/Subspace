@@ -10,7 +10,7 @@ const WelcomeScreen = ({ session, onWelcomeComplete }) => {
     const timer = setTimeout(() => {
       setVisible(false);
       onWelcomeComplete();
-    }, 2000);
+    }, 1000);
 
     return () => clearTimeout(timer);
   }, []);

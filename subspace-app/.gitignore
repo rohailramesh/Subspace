@@ -34,5 +34,5 @@ yarn-error.*
 # typescript
 *.tsbuildinfo
 
-#supabase details
-supabase.js
+# Exclude the config.js file
+config.js
