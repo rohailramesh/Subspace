@@ -46,19 +46,28 @@ function calculatePaymentDates(startDate, endDate, billingPeriod) {
   let currentDate = new Date(startDate);
 
   while (currentDate <= endDate) {
-    paymentDates.push(new Date(currentDate));
+    paymentDates.push(
+      new Date(
+        Date.UTC(
+          currentDate.getFullYear(),
+          currentDate.getMonth(),
+          currentDate.getDate()
+        )
+      )
+    );
+
     switch (billingPeriod) {
       case "Monthly":
-        currentDate.setMonth(currentDate.getMonth() + 1);
+        currentDate.setUTCMonth(currentDate.getUTCMonth() + 1);
         break;
       case "Annually":
-        currentDate.setFullYear(currentDate.getFullYear() + 1);
+        currentDate.setUTCFullYear(currentDate.getUTCFullYear() + 1);
         break;
       case "Quarterly":
-        currentDate.setMonth(currentDate.getMonth() + 3);
+        currentDate.setUTCMonth(currentDate.getUTCMonth() + 3);
         break;
       case "Biannually":
-        currentDate.setMonth(currentDate.getMonth() + 6);
+        currentDate.setUTCMonth(currentDate.getUTCMonth() + 6);
         break;
       default:
         break;
@@ -97,14 +106,25 @@ export default function AddScreen({ session }) {
       return;
     }
 
-    const adjustedNextBillingDate = new Date(nextBillingDate);
-    adjustedNextBillingDate.setDate(adjustedNextBillingDate.getDate() + 1);
+    const adjustedNextBillingDate = new Date(
+      Date.UTC(
+        nextBillingDate.getFullYear(),
+        nextBillingDate.getMonth(),
+        nextBillingDate.getDate()
+      )
+    );
 
-    const adjustStartDate = new Date(startDate);
-    adjustStartDate.setDate(adjustStartDate.getDate() + 1);
+    const adjustStartDate = new Date(
+      Date.UTC(
+        startDate.getFullYear(),
+        startDate.getMonth(),
+        startDate.getDate()
+      )
+    );
 
-    const adjustEndDate = new Date(endDate);
-    adjustEndDate.setDate(adjustEndDate.getDate() + 1);
+    const adjustEndDate = new Date(
+      Date.UTC(endDate.getFullYear(), endDate.getMonth(), endDate.getDate())
+    );
 
     const paymentDates = calculatePaymentDates(
       adjustStartDate,
@@ -124,7 +144,7 @@ export default function AddScreen({ session }) {
         notes: notes,
         start_date: adjustStartDate,
         end_date: adjustEndDate,
-        next_billing_date: paymentDate, // Use the current payment date
+        next_billing_date: paymentDate.toISOString(), // Use ISO string for UTC date
       });
 
       if (error) {

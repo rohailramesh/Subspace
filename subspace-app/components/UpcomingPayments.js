@@ -269,7 +269,7 @@ export default function UpcomingPayments({ session }) {
       const { data, error } = await supabase
         .from("subspace")
         .select("*")
-        .order("next_billing_date", { ascending: false })
+        .order("next_billing_date", { ascending: true })
         .eq("user_id", session.user.id);
 
       // The rest of your code to handle the data and error
