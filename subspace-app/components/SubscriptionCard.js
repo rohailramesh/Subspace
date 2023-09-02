@@ -20,10 +20,10 @@ const SubscriptionCard = ({ subscription, onDelete }) => {
           <Text style={styles.boldText}>Category: </Text>
           {subscription.category}
         </Text>
-        <Text variant="bodyMedium">
+        {/* <Text variant="bodyMedium">
           <Text style={styles.boldText}>Next Billing Date:</Text>{" "}
           {subscription.next_billing_date}
-        </Text>
+        </Text> */}
         <Text variant="bodyMedium">
           <Text style={styles.boldText}>Start Date:</Text>{" "}
           {subscription.start_date}
@@ -36,7 +36,9 @@ const SubscriptionCard = ({ subscription, onDelete }) => {
         </Text>
       </Card.Content>
       <Card.Actions>
-        <Button onPress={onDelete}>Delete</Button>
+        <Button onPress={onDelete} mode="contained" style={styles.button}>
+          Delete
+        </Button>
       </Card.Actions>
     </Card>
   );
@@ -54,6 +56,13 @@ const styles = {
   },
   boldText: {
     fontWeight: "bold",
+  },
+  button: {
+    backgroundColor: "black", // Customize button background color
+    marginTop: 10,
+  },
+  buttonText: {
+    color: "white", // Customize button text color
   },
 };
 
