@@ -368,7 +368,7 @@ export default function UpcomingPayments({ session }) {
                           style={styles.button}
                           onPress={() => deleteSubscription(subscription.id)} // Call the deleteSubscription function here
                         >
-                          Delete Subscription
+                          Remove Payment
                         </Button>
                       </Card.Content>
                     </Card>

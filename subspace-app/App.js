@@ -17,14 +17,14 @@ export default function App() {
   const [session, setSession] = useState(null);
   const [showWelcome, setShowWelcome] = useState(true);
   useEffect(() => {
-    const checkSession = async () => {
-      const { data: session, error } = await supabase.auth.getSession();
-      if (session) {
-        supabase.auth.signOut(); // Log out if a session is found
-      }
-    };
+    // const checkSession = async () => {
+    //   const { data: session, error } = await supabase.auth.getSession();
+    //   if (session) {
+    //     supabase.auth.signOut(); // Log out if a session is found
+    //   }
+    // };
 
-    checkSession();
+    // checkSession();
 
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);

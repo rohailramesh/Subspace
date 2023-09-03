@@ -18,6 +18,7 @@ export default function Profile({ session }) {
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [email, setEmail] = useState("");
 
   useEffect(() => {
     // console.log(session.user.id);
@@ -38,14 +39,13 @@ export default function Profile({ session }) {
         .eq("id", session.user.id)
         .single();
 
-      console.log(!name);
       if (error && status !== 406) {
         throw error;
       }
       if (data) {
         setName(data.name);
+        setEmail(data.email);
       }
-      //   Alert.alert("Success", "Name saved");
     } catch (error) {
       Alert.alert(error.message);
     } finally {
@@ -68,8 +68,10 @@ export default function Profile({ session }) {
         throw error;
       } else {
         setName(name);
-        // setNameSaved(true); // Set the nameSaved state to true
-        console.log("Name saved");
+        Alert.alert(
+          "Name saved sucessfully",
+          "Log back in to see updated name"
+        );
       }
     } catch (error) {
       Alert.alert(error.message);
@@ -128,6 +130,17 @@ export default function Profile({ session }) {
             />
           </View>
           <View>
+            <View>
+              <View style={styles.fieldContainer}>
+                <Text style={styles.boldText}>Email:</Text>
+                <TextInput
+                  value={email}
+                  placeholder={email}
+                  style={styles.input}
+                  editable={false}
+                />
+              </View>
+            </View>
             <View>
               <View style={styles.fieldContainer}>
                 <Text style={styles.boldText}>Name:</Text>
