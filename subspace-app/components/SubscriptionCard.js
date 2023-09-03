@@ -20,10 +20,6 @@ const SubscriptionCard = ({ subscription, onDelete }) => {
           <Text style={styles.boldText}>Category: </Text>
           {subscription.category}
         </Text>
-        {/* <Text variant="bodyMedium">
-          <Text style={styles.boldText}>Next Billing Date:</Text>{" "}
-          {subscription.next_billing_date}
-        </Text> */}
         <Text variant="bodyMedium">
           <Text style={styles.boldText}>Start Date:</Text>{" "}
           {subscription.start_date}

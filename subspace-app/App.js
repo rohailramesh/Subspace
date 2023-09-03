@@ -4,7 +4,6 @@ import React, { useState, useEffect } from "react";
 import { supabase } from "./lib/supabase";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import HomePage from "./screens/HomePage";
 import Profile from "./components/Profile";
 import AddScreen from "./components/AddScreen";

@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { supabase } from "../lib/supabase";
-import SubscriptionCard from "../components/SubscriptionCard";
 import {
   StyleSheet,
   View,
@@ -10,9 +9,8 @@ import {
   ScrollView,
   ImageBackground,
 } from "react-native";
-import { Input, Button } from "react-native-elements";
-import { Dropdown } from "react-native-element-dropdown";
-import { IconButton, Card } from "react-native-paper";
+import { Button } from "react-native-elements";
+import { IconButton } from "react-native-paper";
 export default function Profile({ session }) {
   const [loading, setLoading] = useState(true);
   const [name, setName] = useState("");
@@ -21,7 +19,6 @@ export default function Profile({ session }) {
   const [email, setEmail] = useState("");
 
   useEffect(() => {
-    // console.log(session.user.id);
     getProfile();
   }, [session]);
 
