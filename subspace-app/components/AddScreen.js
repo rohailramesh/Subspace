@@ -13,6 +13,7 @@ import { Dropdown } from "react-native-element-dropdown";
 import { DatePickerInput } from "react-native-paper-dates";
 import { Alert } from "react-native";
 import { Text } from "react-native-paper";
+import { ActivityIndicator } from "react-native-paper";
 const subscriptionTypes = [
   { label: "Paid", value: "Paid" },
   { label: "Trial", value: "Trial" },
@@ -89,6 +90,7 @@ export default function AddScreen({ session }) {
   const [nextBillingDate, setNextBillingDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [isFocus, setIsFocus] = useState(false);
+  const [isAddingSubscription, setIsAddingSubscription] = useState(false);
 
   const addSubscription = async () => {
     if (
@@ -106,58 +108,64 @@ export default function AddScreen({ session }) {
       return;
     }
 
-    const adjustedNextBillingDate = new Date(
-      Date.UTC(
-        nextBillingDate.getFullYear(),
-        nextBillingDate.getMonth(),
-        nextBillingDate.getDate()
-      )
-    );
+    setIsAddingSubscription(true); // Start loading indicator
 
-    const adjustStartDate = new Date(
-      Date.UTC(
-        startDate.getFullYear(),
-        startDate.getMonth(),
-        startDate.getDate()
-      )
-    );
+    try {
+      const adjustedNextBillingDate = new Date(
+        Date.UTC(
+          nextBillingDate.getFullYear(),
+          nextBillingDate.getMonth(),
+          nextBillingDate.getDate()
+        )
+      );
 
-    const adjustEndDate = new Date(
-      Date.UTC(endDate.getFullYear(), endDate.getMonth(), endDate.getDate())
-    );
+      const adjustStartDate = new Date(
+        Date.UTC(
+          startDate.getFullYear(),
+          startDate.getMonth(),
+          startDate.getDate()
+        )
+      );
 
-    const paymentDates = calculatePaymentDates(
-      adjustStartDate,
-      adjustEndDate,
-      billingPeriod
-    );
+      const adjustEndDate = new Date(
+        Date.UTC(endDate.getFullYear(), endDate.getMonth(), endDate.getDate())
+      );
 
-    for (const paymentDate of paymentDates) {
-      const { data, error } = await supabase.from("subspace").insert({
-        user_id: session.user.id,
-        name: name,
-        price: price,
-        type: type,
-        status: status,
-        category: category,
-        billing_period: billingPeriod,
-        notes: notes,
-        start_date: adjustStartDate,
-        end_date: adjustEndDate,
-        next_billing_date: paymentDate.toISOString(), // Use ISO string for UTC date
-      });
+      const paymentDates = calculatePaymentDates(
+        adjustStartDate,
+        adjustEndDate,
+        billingPeriod
+      );
 
-      if (error) {
-        console.log(error);
-        return; // If there's an error, exit the loop and do not add more records
+      for (const paymentDate of paymentDates) {
+        const { data, error } = await supabase.from("subspace").insert({
+          user_id: session.user.id,
+          name: name,
+          price: price,
+          type: type,
+          status: status,
+          category: category,
+          billing_period: billingPeriod,
+          notes: notes,
+          start_date: adjustStartDate,
+          end_date: adjustEndDate,
+          next_billing_date: paymentDate.toISOString(), // Use ISO string for UTC date
+        });
+
+        if (error) {
+          console.log(error);
+          return; // If there's an error, exit the loop and do not add more records
+        }
       }
-    }
 
-    Alert.alert(
-      "Subscription Added",
-      "Please refresh your subscriptions if needed"
-    );
-    resetForm();
+      Alert.alert("Subscription Added", "Please refresh your subspace");
+      resetForm();
+    } catch (error) {
+      console.error(error);
+      // Handle the error as needed
+    } finally {
+      setIsAddingSubscription(false); // Stop loading indicator
+    }
   };
 
   async function resetForm() {
@@ -172,7 +180,6 @@ export default function AddScreen({ session }) {
     setEndDate(new Date());
     setNextBillingDate(new Date());
   }
-
   return (
     <ImageBackground
       source={require("../assets/homepage-bg.jpg")}
@@ -354,7 +361,14 @@ export default function AddScreen({ session }) {
               }}
             />
           </View>
-
+          {isAddingSubscription && (
+            <View style={styles.activityIndicatorContainer}>
+              <ActivityIndicator animating={true} size="large" color="black" />
+              <Text style={styles.activityIndicatorText}>
+                Adding Subscriptions, please wait...
+              </Text>
+            </View>
+          )}
           <Button
             title="Add Subscription"
             // type="clear"
@@ -431,6 +445,15 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: "white", // Customize button text color
+  },
+  activityIndicatorContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  activityIndicatorText: {
+    marginTop: 10,
+    color: "black",
+    fontWeight: "bold",
   },
 });
 
